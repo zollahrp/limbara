@@ -149,30 +149,43 @@ export default function Home() {
 
   const bottleRotate = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.5, 1],
-    [18, 0, 0, 0],
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [18, 0, 0, 0, 0, 0],
   );
+
   const bottleX = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.5, 0.75, 1],
-    [0, 180, 0, 0, 0],
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [0, 180, 0, 0, 0, 0],
   );
+
+  const bottleY = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [0, 0, 0, 0, -30, -50],
+  );
+
   const bottleScale = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.5, 0.75, 1],
-    [1, 0.85, 0.9, 0.85, 0.75],
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    [1, 0.85, 0.9, 0.85, 0.75, 0.45],
   );
 
   const smoothRotate = useSpring(bottleRotate, springConfigWithMass);
+
   const smoothX = useSpring(bottleX, springConfigWithMass);
+
+  const smoothY = useSpring(bottleY, springConfigWithMass);
+
   const smoothScale = useSpring(bottleScale, springConfigWithMass);
 
   const detailOpacity = useTransform(
     scrollYProgress,
-    [0.25, 0.38, 0.5],
+    [0.18, 0.28, 0.4],
     [0, 1, 1],
   );
-  const detailX = useTransform(scrollYProgress, [0.25, 0.38], [120, 0]);
+
+  const detailX = useTransform(scrollYProgress, [0.18, 0.28], [120, 0]);
 
   const smoothDetailOpacity = useSpring(detailOpacity, springConfig);
   const smoothDetailX = useSpring(detailX, springConfig);
@@ -184,7 +197,12 @@ export default function Home() {
     >
       <motion.div
         className="fixed inset-0 z-30 pointer-events-none flex items-center justify-center"
-        style={{ rotate: smoothRotate, scale: smoothScale, x: smoothX }}
+        style={{
+          rotate: smoothRotate,
+          scale: smoothScale,
+          x: smoothX,
+          y: smoothY,
+        }}
       >
         <div className="relative w-[220px] h-[480px] sm:w-[280px] sm:h-[600px] lg:w-[420px] lg:h-[900px]">
           <Image
@@ -449,6 +467,157 @@ export default function Home() {
             <br />
             Possibilities
           </h4>
+        </div>
+      </section>
+
+      <section
+        className="
+    relative
+    h-screen
+    snap-start
+    bg-[#f7f4ee]
+    overflow-hidden
+  "
+      >
+        {/* BACKGROUND */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <h2 className="text-[12vw] font-black uppercase text-black/[0.04]">
+            RECYCLABLE
+          </h2>
+        </div>
+
+        {/* HEADER */}
+        <div className="absolute top-16 left-8 lg:left-24 z-20">
+          <p className="uppercase tracking-[0.5em] text-xs text-gray-500 mb-4">
+            Beyond Plastic
+          </p>
+
+          <h2
+            className="
+        text-4xl
+        sm:text-5xl
+        lg:text-7xl
+        font-black
+        uppercase
+        leading-[0.85]
+      "
+          >
+            More Than
+            <br />
+            Bottles
+          </h2>
+        </div>
+
+        {/* DESCRIPTION */}
+        <div
+          className="
+      absolute
+      top-20
+      right-8
+      lg:right-24
+      max-w-[420px]
+      z-20
+    "
+        >
+          <p className="text-gray-600 leading-8">
+            Botol plastik bukan satu-satunya limbah yang dapat didaur ulang.
+            Berbagai material lain juga memiliki kesempatan untuk mendapatkan
+            kehidupan kedua melalui proses pengolahan yang tepat.
+          </p>
+        </div>
+
+        {/* MAIN ROW */}
+        <div className="relative z-10 h-full flex items-center justify-center px-8 lg:px-20">
+          <div className="grid grid-cols-5 items-end gap-8 lg:gap-16 w-full max-w-[1600px]">
+            {/* TEXTILE */}
+            <div className="text-center">
+              <Image
+                src="/img/textile.png"
+                alt="Textile"
+                width={420}
+                height={700}
+                className="object-contain mx-auto"
+              />
+
+              <p className="mt-6 text-xs tracking-[0.4em] uppercase text-gray-400">
+                Recyclable
+              </p>
+
+              <h3 className="text-2xl lg:text-3xl font-black uppercase mt-2">
+                Textile
+              </h3>
+            </div>
+
+            {/* PAPER */}
+            <div className="text-center">
+              <Image
+                src="/img/paper.png"
+                alt="Paper"
+                width={420}
+                height={700}
+                className="object-contain mx-auto"
+              />
+
+              <p className="mt-6 text-xs tracking-[0.4em] uppercase text-gray-400">
+                Recyclable
+              </p>
+
+              <h3 className="text-2xl lg:text-3xl font-black uppercase mt-2">
+                Paper
+              </h3>
+            </div>
+
+            {/* SLOT BOTOL */}
+            <div className="text-center">
+              <div className="h-[280px] lg:h-[360px]" />
+
+              <p className="mt-6 text-xs tracking-[0.4em] uppercase text-gray-400">
+                Recyclable
+              </p>
+
+              <h3 className="text-2xl lg:text-3xl font-black uppercase mt-2">
+                Plastic
+              </h3>
+            </div>
+
+            {/* GLASS */}
+            <div className="text-center">
+              <Image
+                src="/img/glass.png"
+                alt="Glass"
+                width={420}
+                height={700}
+                className="object-contain mx-auto"
+              />
+
+              <p className="mt-6 text-xs tracking-[0.4em] uppercase text-gray-400">
+                Recyclable
+              </p>
+
+              <h3 className="text-2xl lg:text-3xl font-black uppercase mt-2">
+                Glass
+              </h3>
+            </div>
+
+            {/* E-WASTE */}
+            <div className="text-center">
+              <Image
+                src="/img/e-waste.png"
+                alt="E-Waste"
+                width={420}
+                height={700}
+                className="object-contain mx-auto"
+              />
+
+              <p className="mt-6 text-xs tracking-[0.4em] uppercase text-gray-400">
+                Recyclable
+              </p>
+
+              <h3 className="text-2xl lg:text-3xl font-black uppercase mt-2">
+                E-Waste
+              </h3>
+            </div>
+          </div>
         </div>
       </section>
     </main>

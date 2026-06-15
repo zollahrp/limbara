@@ -11,5 +11,7 @@ export const createClient = () => {
     );
   }
 
+  // tes
+
   return createBrowserClient(supabaseUrl, supabaseKey);
 };

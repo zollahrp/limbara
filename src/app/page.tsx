@@ -620,6 +620,73 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* <section className="relative h-screen snap-start bg-white overflow-hidden">
+
+  <div className="absolute top-20 left-24">
+    <p className="uppercase tracking-[0.5em] text-xs text-gray-400">
+      Smart Recycling
+    </p>
+
+    <h2 className="text-7xl font-black uppercase leading-[0.85]">
+      Waste
+      <br />
+      Recognition
+    </h2>
+  </div>
+
+  <div className="h-full flex items-center justify-center">
+    <div className="grid grid-cols-3 gap-20 max-w-[1400px]">
+
+      <div>
+        <span className="text-[120px] font-black text-black/10">
+          01
+        </span>
+
+        <h3 className="text-3xl font-black uppercase mt-4">
+          Scan
+        </h3>
+
+        <p className="mt-4 text-gray-600 leading-8">
+          Capture waste instantly using your
+          camera or upload an existing image.
+        </p>
+      </div>
+
+      <div>
+        <span className="text-[120px] font-black text-black/10">
+          02
+        </span>
+
+        <h3 className="text-3xl font-black uppercase mt-4">
+          Detect
+        </h3>
+
+        <p className="mt-4 text-gray-600 leading-8">
+          AI analyzes the material and
+          identifies the waste category.
+        </p>
+      </div>
+
+      <div>
+        <span className="text-[120px] font-black text-black/10">
+          03
+        </span>
+
+        <h3 className="text-3xl font-black uppercase mt-4">
+          Recycle
+        </h3>
+
+        <p className="mt-4 text-gray-600 leading-8">
+          Receive practical recommendations
+          for disposal or recycling.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</section> */}
     </main>
   );
 }

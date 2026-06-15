@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,13 +39,13 @@ export default function Navbar() {
         
         {/* AREA LOGO */}
         <Link href="/" className="flex items-center gap-2">
-          {/* Sesuaikan path src dengan lokasi gambar di folder public kamu */}
           <Image
-            src="/img/logo/logo-limbara.png" 
+            src="/img/logo/limbara.png" 
             alt="Limbara Logo"
-            width={160}
-            height={50}
-            className="object-contain h-8 sm:h-10 w-auto"
+            width={700}
+            height={250}
+            // Ubah h-8 menjadi h-12 (48px) atau h-16 (64px) agar jauh lebih besar
+            className="object-contain h-20 sm:h-20 lg:h-[120px] w-auto drop-shadow-sm"
             priority
           />
         </Link>

@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import Navbar from "@/components/Navbar";
 
 const springConfig = { stiffness: 60, damping: 20 };
 const springConfigWithMass = { ...springConfig, mass: 0.8 };
@@ -217,23 +218,7 @@ export default function Home() {
       </motion.div>
 
       <section className="relative h-screen snap-start overflow-hidden bg-white">
-        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 py-4 sm:px-8 sm:py-6 lg:px-12 lg:py-8 z-40">
-          <div className="flex items-center gap-8">
-            <button className="text-3xl">☰</button>
-            <div>
-              <h1 className="text-xl sm:text-3xl lg:text-4xl font-black tracking-[0.3em] text-red-900"></h1>
-              <h1 className="text-4xl font-black tracking-[0.3em] text-red-900">
-                LIMBARA
-              </h1>
-              <p className="text-xs tracking-[0.5em] uppercase text-gray-600">
-                Waste Recycling
-              </p>
-            </div>
-          </div>
-          <button className="bg-green-700 text-white px-8 py-3 font-bold uppercase">
-            Login
-          </button>
-        </header>
+        <Navbar />
 
         <div className="absolute left-0 top-0 h-full w-24 flex flex-col items-center py-8 z-20">
           <div className="w-px flex-1 bg-black/20" />

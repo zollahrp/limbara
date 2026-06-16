@@ -47,7 +47,7 @@ export default function FloatingBottle({
   const bottleY = useTransform(
     scrollYProgress,
     [0, 0.12, 0.24, 0.36, 0.48, 0.6, SCROLL_THRESHOLDS.BOTTLE_END],
-    [0, 0, 0, 0, -30, -50, -50],
+    [0, 0, 0, 0, -10, -20, -20],
     { clamp: true },
   );
 

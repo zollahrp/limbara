@@ -2,7 +2,7 @@ export const SPRING_CONFIG = { stiffness: 60, damping: 20 };
 export const SPRING_CONFIG_WITH_MASS = { ...SPRING_CONFIG, mass: 0.8 };
 
 export const SCROLL_THRESHOLDS = {
-  HIDE_BOTTLE: 0.63,
+  HIDE_BOTTLE: 0.65,
   BOTTLE_END: 0.714,
 } as const;
 

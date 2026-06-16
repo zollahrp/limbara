@@ -141,5 +141,5 @@ export default function RecyclableSection() {
         </div>
       </div>
     </section>
-  );
+  );  
 }

@@ -22,8 +22,19 @@ export async function ScanImage(image: File): Promise<ScanResponse> {
 
     // 1. JIKA BERHASIL MENDETEKSI OBJEK (YOLO / Gemini)
     if (data.status === "success" && "allDetections" in data && data.allDetections.length > 0) {
+      // Deduplikasi: hanya simpan detection dengan confidence tertinggi per className
+      const deduplicatedDetections = Array.from(
+        data.allDetections.reduce((map, detection) => {
+          const existing = map.get(detection.className);
+          if (!existing || detection.confidence > existing.confidence) {
+            map.set(detection.className, detection);
+          }
+          return map;
+        }, new Map()).values()
+      );
+
       // Urutkan dari confidence paling tinggi ke rendah
-      const sortedDetections = data.allDetections.sort(
+      const sortedDetections = deduplicatedDetections.sort(
         (a, b) => b.confidence - a.confidence
       );
 
@@ -33,7 +44,7 @@ export async function ScanImage(image: File): Promise<ScanResponse> {
         status: "success",
         message: data.message,
         image_url: data.image_url,
-        totalDetected: data.totalDetected,
+        totalDetected: uniqueClassNames.length,
         detected_class_names: uniqueClassNames,
         allDetections: sortedDetections,
       };

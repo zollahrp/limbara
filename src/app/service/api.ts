@@ -122,51 +122,67 @@ export async function GetWasteInsight(detectedClasses: string[]): Promise<Insigh
   }
 }
 
-const api = Axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  timeout: 30000, // 30 detik (Overpass API bisa lambat)
-});
+// ─── Tambahan untuk app/service/api.ts ────────────────────────────────────────
+// Sisipkan import & fungsi berikut ke dalam file api.ts yang sudah ada.
 
-// ─── Tipe Data ────────────────────────────────────────────────────────────────
+import { createClient } from "@/utils/supabase/client";
+import { ScanHistoryItem, ScanHistoryPage } from "@/types/scan";
 
-export interface BankSampah {
-  id: number;
-  name: string;
-  category: string;
-  address: string;
-  lat: number;
-  lng: number;
-  phone: string | null;
-  opening_hours: string | null;
-  website: string | null;
-  google_maps_url: string;
-}
 
-export interface BankSampahResponse {
-  status: string;
-  message: string;
-  found: boolean;
-  total: number;
-  radius_km: number;
-  user_location: {
-    lat: number;
-    lng: number;
+export async function getScanHistories(
+  page: number = 1,
+  pageSize: number = 9
+): Promise<ScanHistoryPage> {
+  const supabase = createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.user) {
+    return { data: [], total: 0, page, pageSize, totalPages: 0 };
+  }
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, error, count } = await supabase
+    .from("scan_histories")
+    .select("*", { count: "exact" })
+    .eq("user_id", session.user.id)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const total = count ?? 0;
+
+  return {
+    data: (data ?? []) as ScanHistoryItem[],
+    total,
+    page,
+    pageSize,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
   };
-  data: BankSampah[];
 }
 
-// ─── Fungsi API ───────────────────────────────────────────────────────────────
+/**
+ * Mengambil satu riwayat scan berdasarkan ID (opsional, untuk deep-link).
+ */
+export async function getScanHistoryById(id: string): Promise<ScanHistoryItem | null> {
+  const supabase = createClient();
 
-export async function getNearbyBankSampah(
-  lat: number,
-  lng: number,
-  radius: number = 3
-): Promise<BankSampahResponse> {
-  const response = await api.get<BankSampahResponse>("/api/bank-sampah/nearby", {
-    params: { lat, lng, radius },
-  });
-  return response.data;
+  const { data, error } = await supabase
+    .from("scan_histories")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    return null;
+  }
+
+  return data as ScanHistoryItem;
 }

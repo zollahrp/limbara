@@ -159,11 +159,10 @@ export default function BankSampahPage() {
             <div className="flex-1 min-h-[400px] lg:min-h-0 border border-black/10 rounded-2xl overflow-hidden shadow-sm bg-white">
               {userLocation && (
                 <MapView
-                  // Cast ke any digunakan sementara untuk bypass strict type jika MapView butuh interface lama
-                  banks={results as any} 
+                  banks={results} // Jika tipe UI_BankSampah[] dan BankSampah[] sudah sama, hapus "as any"
                   userLocation={userLocation}
-                  selectedId={selectedId as unknown as number}
-                  onSelect={(id) => setSelectedId(String(id))}
+                  selectedId={selectedId} // <-- Langsung masukkan tanpa casting ke number
+                  onSelect={(id) => setSelectedId(id)} // <-- id dari MapView sudah pasti string
                 />
               )}
             </div>

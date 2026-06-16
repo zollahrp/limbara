@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { BankSampah } from "@/app/service/api";
+import { UI_BankSampah as BankSampah } from "@/types/BankSampah";
 
 // Fix ikon default Leaflet yang hilang saat pakai webpack/Next.js
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
@@ -36,13 +36,13 @@ const userIcon = new L.Icon({
 interface Props {
   banks: BankSampah[];
   userLocation: { lat: number; lng: number };
-  selectedId: number | null;
-  onSelect: (id: number) => void;
+  selectedId: string | null; 
+  onSelect: (id: string) => void; 
 }
 
 export default function BankSampahMap({ banks, userLocation, selectedId, onSelect }: Props) {
   const mapRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<Record<number, L.Marker>>({});
+  const markersRef = useRef<Record<string, L.Marker>>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Inisialisasi peta sekali saja

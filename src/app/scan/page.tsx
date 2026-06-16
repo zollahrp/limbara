@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, RotateCcw } from "lucide-react";
+import { AlertTriangle, RotateCcw, History } from "lucide-react";
 import { ScanImage, GetWasteInsight } from "@/app/service/api";
 import { ScanSuccessResponse, WasteInsightData } from "@/types/scan";
 
@@ -14,6 +15,7 @@ import ResultModal from "@/components/scan/ResultModal";
 import Navbar from "@/components/Navbar";
 
 export default function ScanPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabMode>("upload");
   
   const [isScanning, setIsScanning] = useState(false);
@@ -80,6 +82,18 @@ export default function ScanPage() {
   return (
     <div className="min-h-screen bg-[#F7F8F4] font-sans pb-20 flex flex-col items-center">
       <Navbar />
+
+      {/* Tombol Riwayat Saya — pojok kanan atas, di bawah Navbar */}
+      <div className="w-full max-w-[650px] px-4 sm:px-6 flex justify-end pt-24 sm:pt-28">
+        <button
+          onClick={() => router.push("/riwayat")}
+          className="flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl shadow-sm transition-colors"
+        >
+          <History className="w-4 h-4 text-green-700" />
+          Riwayat Saya
+        </button>
+      </div>
+
       <ScanHeader />
 
       <main className="w-full max-w-[650px] px-4 sm:px-6 relative">

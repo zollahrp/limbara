@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <main
       ref={containerRef}
-      className="h-screen overflow-y-scroll snap-y snap-mandatory bg-white pb-20"
+      className="h-screen overflow-y-scroll snap-y snap-mandatory bg-white"
     >
       <FloatingBottle scrollYProgress={scrollYProgress} showBottle={showBottle} />
       

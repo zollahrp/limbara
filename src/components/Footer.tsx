@@ -3,14 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-
 export default function Footer() {
-
   return (
-
     <footer className="bg-[#f8f7f3] border-t border-black/10">
-
-
       <div
         className="
         max-w-[1400px]
@@ -20,8 +15,6 @@ export default function Footer() {
         py-16
         "
       >
-
-
         <div
           className="
           grid
@@ -30,63 +23,41 @@ export default function Footer() {
           gap-12
           "
         >
-
-
-
           {/* BRAND */}
 
           <div className="md:col-span-2">
-
-
             <Image
-
               src="/img/logo/limbara.png"
-
               alt="Limbara"
-
               width={250}
-
               height={80}
-
               className="
               object-contain
               w-auto
               h-12
               mb-6
               "
-
             />
 
-
             <p
-            className="
+              className="
             max-w-md
             text-gray-500
             leading-7
             text-sm
             "
             >
-
-              Platform digital berbasis teknologi
-              yang membantu mengenali, mengelola,
-              dan mengoptimalkan potensi sampah
-              untuk mendukung ekonomi sirkular.
-
+              Platform digital berbasis teknologi yang membantu mengenali,
+              mengelola, dan mengoptimalkan potensi sampah untuk mendukung
+              ekonomi sirkular.
             </p>
-
-
           </div>
-
-
-
 
           {/* MENU */}
 
           <div>
-
-
             <h4
-            className="
+              className="
             text-xs
             uppercase
             tracking-[0.3em]
@@ -97,23 +68,11 @@ export default function Footer() {
               Menu
             </h4>
 
-
             <div className="space-y-4">
-
-
-              {
-                [
-                  "Beranda",
-                  "Scan Sampah",
-                  "Bank Sampah"
-                ].map(item=>(
-
-                  <Link
-
+              {["Beranda", "Scan Sampah", "Bank Sampah"].map((item) => (
+                <Link
                   href="#"
-
                   key={item}
-
                   className="
                   block
                   text-sm
@@ -121,34 +80,18 @@ export default function Footer() {
                   hover:text-green-700
                   transition
                   "
-
-                  >
-
+                >
                   {item}
-
-                  </Link>
-
-
-                ))
-              }
-
-
+                </Link>
+              ))}
             </div>
-
-
           </div>
-
-
-
-
 
           {/* CONTACT */}
 
           <div>
-
-
             <h4
-            className="
+              className="
             text-xs
             uppercase
             tracking-[0.3em]
@@ -156,32 +99,23 @@ export default function Footer() {
             mb-6
             "
             >
-
               Contact
-
             </h4>
 
-
-
             <div
-            className="
+              className="
             space-y-4
             text-sm
             text-gray-600
             "
             >
+              <p>info@limbara.id</p>
 
-              <p>
-                info@limbara.id
-              </p>
-
-              <p>
-                Indonesia
-              </p>
+              <p>Indonesia</p>
 
               <div className="flex gap-4 pt-2">
-
-                <span className="
+                <span
+                  className="
                 w-8
                 h-8
                 rounded-full
@@ -191,12 +125,13 @@ export default function Footer() {
                 items-center
                 justify-center
                 text-xs
-                ">
+                "
+                >
                   IG
                 </span>
 
-
-                <span className="
+                <span
+                  className="
                 w-8
                 h-8
                 rounded-full
@@ -206,30 +141,19 @@ export default function Footer() {
                 items-center
                 justify-center
                 text-xs
-                ">
+                "
+                >
                   IN
                 </span>
-
-
               </div>
-
-
             </div>
-
-
           </div>
-
-
         </div>
-
-
-
-
 
         {/* BOTTOM */}
 
         <div
-        className="
+          className="
         mt-14
         pt-6
         border-t
@@ -245,25 +169,11 @@ export default function Footer() {
         tracking-[0.25em]
         "
         >
+          <p>© 2026 Limbara. All rights reserved.</p>
 
-          <p>
-            © 2026 Limbara. All rights reserved.
-          </p>
-
-
-          <p>
-            Sustainable Digital Innovation
-          </p>
-
-
+          <p>Sustainable Digital Innovation</p>
         </div>
-
-
       </div>
-
-
     </footer>
-
   );
-
 }

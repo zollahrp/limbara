@@ -10,10 +10,17 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import Navbar from "@/components/Navbar";
-import { useInView } from "framer-motion";
+import Footer from "@/components/Footer";
 
-const springConfig = { stiffness: 60, damping: 20 };
-const springConfigWithMass = { ...springConfig, mass: 0.8 };
+// Animation configs
+const SPRING_CONFIG = { stiffness: 60, damping: 20 };
+const SPRING_CONFIG_WITH_MASS = { ...SPRING_CONFIG, mass: 0.8 };
+
+// Scroll animation thresholds
+const SCROLL_THRESHOLDS = {
+  HIDE_BOTTLE: 0.63,
+  BOTTLE_END: 0.714,
+} as const;
 
 const heroStats = [
   { label: "Category", value: "PET" },
@@ -96,65 +103,6 @@ const secondLifeProducts = [
   },
 ];
 
-const recognitionSteps = [
-  {
-    number: "01",
-    title: "Ambil Foto",
-    text: "Cukup jepret langsung foto sampahmu, atau unggah gambar dari galeri.",
-    icon: "📷",
-  },
-  {
-    number: "02",
-    title: "Deteksi Sampah",
-    text: "Sistem AI akan memproses dan mengenali jenis sampah berdasarkan gambar.",
-    icon: "🧠",
-  },
-  {
-    number: "03",
-    title: "Langkah Nyata",
-    text: "Dapatkan panduan praktis membuang sampah atau ide daur ulang menarik.",
-    icon: "♻️",
-  },
-];
-
-const workflowSteps = [
-  {
-    number: "01",
-    title: "Input Sampah",
-    icon: "📷",
-    desc: "Pengguna mengunggah atau memotret sampah.",
-    color: "#446C66",
-  },
-  {
-    number: "02",
-    title: "AI Detection",
-    icon: "🤖",
-    desc: "Model AI mengenali objek sampah.",
-    color: "#00A99D",
-  },
-  {
-    number: "03",
-    title: "Klasifikasi",
-    icon: "♻️",
-    desc: "Menentukan kategori sampah.",
-    color: "#7BBF6A",
-  },
-  {
-    number: "04",
-    title: "Analisis",
-    icon: "📊",
-    desc: "Mengolah informasi dan karakteristik.",
-    color: "#F59E0B",
-  },
-  {
-    number: "05",
-    title: "Rekomendasi",
-    icon: "💡",
-    desc: "Memberikan solusi pengelolaan terbaik.",
-    color: "#8B5CF6",
-  },
-];
-
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
     <div>
@@ -216,102 +164,54 @@ export default function Home() {
 
   const [showBottle, setShowBottle] = useState(true);
 
-  // SECTION 6 mulai sekitar 0.83
+  // Hide bottle when scrolling to CTA section
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest >= 0.83) {
-      setShowBottle(false);
-    } else {
-      setShowBottle(true);
-    }
+    setShowBottle(latest < SCROLL_THRESHOLDS.HIDE_BOTTLE);
   });
 
-  const bottleEnd = 0.83;
-
-  // ROTATE BOTOL
+  // Bottle animation transforms
   const bottleRotate = useTransform(
     scrollYProgress,
-    [0, 0.16, 0.33, 0.5, 0.66, bottleEnd, 1],
+    [0, 0.12, 0.24, 0.36, 0.48, 0.6, SCROLL_THRESHOLDS.BOTTLE_END],
     [18, 0, 0, 0, 0, 0, 0],
-    {
-      clamp: true,
-    },
+    { clamp: true },
   );
 
-  // POSISI X
   const bottleX = useTransform(
     scrollYProgress,
-    [0, 0.16, 0.33, 0.5, 0.66, bottleEnd, 1],
+    [0, 0.12, 0.24, 0.36, 0.48, 0.6, SCROLL_THRESHOLDS.BOTTLE_END],
     [0, 180, 0, 0, 0, 0, 0],
-    {
-      clamp: true,
-    },
+    { clamp: true },
   );
 
-  // POSISI Y
   const bottleY = useTransform(
     scrollYProgress,
-    [0, 0.16, 0.33, 0.5, 0.66, bottleEnd, 1],
+    [0, 0.12, 0.24, 0.36, 0.48, 0.6, SCROLL_THRESHOLDS.BOTTLE_END],
     [0, 0, 0, 0, -30, -50, -50],
-    {
-      clamp: true,
-    },
+    { clamp: true },
   );
 
-  // SCALE
   const bottleScale = useTransform(
     scrollYProgress,
-    [0, 0.16, 0.33, 0.5, 0.66, bottleEnd, 1],
+    [0, 0.1, 0.2, 0.34, 0.48, 0.6, SCROLL_THRESHOLDS.BOTTLE_END],
     [1, 0.85, 0.9, 0.85, 0.75, 0.45, 0.45],
-    {
-      clamp: true,
-    },
+    { clamp: true },
   );
 
-  const smoothRotate = useSpring(bottleRotate, springConfigWithMass);
-
-  const smoothX = useSpring(bottleX, springConfigWithMass);
-
-  const smoothY = useSpring(bottleY, springConfigWithMass);
-
-  const smoothScale = useSpring(bottleScale, springConfigWithMass);
-
-  // const detailOpacity = useTransform(
-  //   scrollYProgress,
-  //   [0.16, 0.22, 0.33, 0.36],
-  //   [0, 1, 1, 0],
-  //   {
-  //     clamp: true,
-  //   },
-  // );
-
-  // const detailX = useTransform(
-  //   scrollYProgress,
-  //   [0.16, 0.22, 0.33, 0.36],
-  //   [120, -60, -60, 120],
-  //   {
-  //     clamp: true,
-  //   },
-  // );
-
-  // const smoothDetailOpacity = useSpring(detailOpacity, springConfig);
-  // const smoothDetailX = useSpring(detailX, springConfig);
+  // Apply spring smoothing
+  const smoothRotate = useSpring(bottleRotate, SPRING_CONFIG_WITH_MASS);
+  const smoothX = useSpring(bottleX, SPRING_CONFIG_WITH_MASS);
+  const smoothY = useSpring(bottleY, SPRING_CONFIG_WITH_MASS);
+  const smoothScale = useSpring(bottleScale, SPRING_CONFIG_WITH_MASS);
 
   return (
     <main
       ref={containerRef}
-      className="h-screen overflow-y-scroll snap-y snap-mandatory bg-white"
+      className="h-screen overflow-y-scroll snap-y snap-mandatory bg-white pb-20"
     >
       {showBottle && (
         <motion.div
-          className="
-    fixed
-    inset-0
-    z-30
-    pointer-events-none
-    flex
-    items-center
-    justify-center
-  "
+          className="fixed inset-0 z-30 pointer-events-none flex items-center justify-center"
           style={{
             rotate: smoothRotate,
             scale: smoothScale,
@@ -360,18 +260,14 @@ export default function Home() {
       </section>
 
       <section className="relative h-screen snap-start bg-[#faf9f6] px-5 sm:px-10 lg:px-20 flex items-center overflow-hidden">
-        {/* BACKGROUND */}
         <div className="absolute right-10 top-10 text-[18vw] font-black text-black/[0.03] leading-none pointer-events-none">
           PET
         </div>
 
         <div className="absolute left-[52%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[620px] h-[620px] rounded-full border border-black/10" />
-
         <div className="absolute left-[52%] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] rounded-full border border-dashed border-black/10" />
 
-        {/* LABEL BACKGROUND */}
         <div className="absolute left-[40%] top-[35%] w-[180px] h-px bg-black/20" />
-
         <div className="absolute left-[40%] top-[35%] -translate-y-1/2 text-[10px] uppercase tracking-[0.4em] text-gray-400">
           Lightweight Material
         </div>
@@ -390,7 +286,6 @@ export default function Home() {
           <h4 className="text-4xl font-black">PET</h4>
         </div>
 
-        {/* MAIN CONTENT WRAPPER */}
         <div
           className="
       relative
@@ -404,7 +299,6 @@ export default function Home() {
       gap-16
     "
         >
-          {/* LEFT CONTENT */}
           <div
             className="
         max-w-[560px]
@@ -477,7 +371,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* RIGHT CARD */}
           <motion.div
             initial={{
               opacity: 0,
@@ -830,10 +723,10 @@ export default function Home() {
   overflow-hidden
   py-24
   flex
+  items-center
   justify-center
 "
       >
-        {/* GRID BG */}
         <div className="absolute inset-0 opacity-[0.04]">
           <svg className="w-full h-full">
             <defs>
@@ -851,31 +744,30 @@ export default function Home() {
           </svg>
         </div>
 
-        {/* WATERMARK */}
         <h2
           className="
-    absolute
-    top-10
-    left-10
-    text-[13vw]
-    font-black
-    uppercase
-    text-black/[0.03]
-    leading-none
-    pointer-events-none
-  "
+  absolute
+  top-10
+  left-10
+  text-[13vw]
+  font-black
+  uppercase
+  text-black/[0.03]
+  leading-none
+  pointer-events-none
+"
         >
           AI FLOW
         </h2>
 
         <div
           className="
-    relative
-    z-10
-    w-full
-    max-w-[1500px]
-    px-4
-  "
+  relative
+  z-10
+  w-full
+  max-w-[1500px]
+  px-4
+"
         >
           {/* HEADER */}
           <motion.div
@@ -887,45 +779,41 @@ export default function Home() {
           >
             <p
               className="
-        uppercase
-        tracking-[0.5em]
-        text-xs
-        text-gray-400
-        mb-5
-      "
+      uppercase
+      tracking-[0.5em]
+      text-xs
+      text-gray-400
+      mb-5
+    "
             >
-              Recognition Pipeline
+              Alur Pengenalan
             </p>
 
             <h2
               className="
-        text-4xl
-        lg:text-6xl
-        font-black
-        leading-[0.9]
-      "
+      text-4xl
+      lg:text-6xl
+      font-black
+      leading-[0.9]
+    "
             >
-              Waste Detection
+              Alur Kerja Deteksi
               <br />
-              Workflow
+              Sampah
             </h2>
           </motion.div>
 
           {/* FLOW */}
           <div
             className="
-  relative
-  flex
-  items-start
-  justify-between
-  gap-2
-  w-full
+relative
+flex
+items-center
+justify-between
+gap-2
+w-full
 "
           >
-            {/* ===================================================== */}
-            {/* STEP 1 */}
-            {/* ===================================================== */}
-
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -937,39 +825,39 @@ export default function Home() {
 
               <div
                 className="
-          border-2
-          border-dashed
-          border-black/20
-          rounded-[22px]
-          bg-white
-          p-4
-        "
+        border-2
+        border-dashed
+        border-black/20
+        rounded-[22px]
+        bg-white
+        p-4
+      "
               >
                 <div
                   className="
-            bg-[#f4f4f4]
-            rounded-2xl
-            overflow-hidden
-            border
-            border-black/10
-          "
+          bg-[#f4f4f4]
+          rounded-2xl
+          overflow-hidden
+          border
+          border-black/10
+        "
                 >
                   <Image
                     src="/img/botol_plastik.png"
-                    alt="Waste"
+                    alt="Sampah"
                     width={250}
                     height={320}
                     className="
-              object-contain
-              h-[220px]
-              mx-auto
-            "
+            object-contain
+            h-[220px]
+            mx-auto
+          "
                   />
                 </div>
 
                 <div className="mt-4">
                   <h3 className="font-black uppercase text-base">
-                    Waste Image
+                    Gambar Sampah
                   </h3>
 
                   <p className="text-xs text-gray-500 mt-2 leading-6">
@@ -979,37 +867,31 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* ARROW */}
-
             <div className="pt-[155px] shrink-0">
               <div
                 className="
-          w-10
-          h-[3px]
-          bg-[#446C66]
-          relative
-        "
+        w-10
+        h-[3px]
+        bg-[#446C66]
+        relative
+      "
               >
                 <div
                   className="
-            absolute
-            right-0
-            top-1/2
-            -translate-y-1/2
-            w-3
-            h-3
-            border-t-[3px]
-            border-r-[3px]
-            border-[#446C66]
-            rotate-45
-          "
+          absolute
+          right-0
+          top-1/2
+          -translate-y-1/2
+          w-3
+          h-3
+          border-t-[3px]
+          border-r-[3px]
+          border-[#446C66]
+          rotate-45
+        "
                 />
               </div>
             </div>
-
-            {/* ===================================================== */}
-            {/* STEP 2 */}
-            {/* ===================================================== */}
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -1022,82 +904,76 @@ export default function Home() {
 
               <div
                 className="
-          border-2
-          border-dashed
-          border-black/20
-          rounded-[22px]
-          bg-white
-          p-4
-          flex
-          flex-col
-          gap-4
-        "
+        border-2
+        border-dashed
+        border-black/20
+        rounded-[22px]
+        bg-white
+        p-4
+        flex
+        flex-col
+        gap-4
+      "
               >
                 <div
                   className="
-            border
-            border-black/10
-            rounded-2xl
-            p-4
-          "
+          border
+          border-black/10
+          rounded-2xl
+          p-4
+        "
                 >
                   <div className="text-4xl mb-3">🖼️</div>
 
-                  <h3 className="font-black uppercase text-sm">Resize</h3>
+                  <h3 className="font-black uppercase text-sm">Ubah Ukuran</h3>
 
                   <p className="text-xs text-gray-500 mt-1">224 × 224</p>
                 </div>
 
                 <div
                   className="
-            border
-            border-black/10
-            rounded-2xl
-            p-4
-          "
+          border
+          border-black/10
+          rounded-2xl
+          p-4
+        "
                 >
                   <div className="text-4xl mb-3">📊</div>
 
-                  <h3 className="font-black uppercase text-sm">
-                    Normalization
-                  </h3>
+                  <h3 className="font-black uppercase text-sm">Normalisasi</h3>
 
-                  <p className="text-xs text-gray-500 mt-1">Rescaling [0,1]</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Pengubahan Skala [0,1]
+                  </p>
                 </div>
               </div>
             </motion.div>
 
-            {/* ARROW */}
-
             <div className="pt-[155px] shrink-0">
               <div
                 className="
-          w-10
-          h-[3px]
-          bg-[#446C66]
-          relative
-        "
+        w-10
+        h-[3px]
+        bg-[#446C66]
+        relative
+      "
               >
                 <div
                   className="
-            absolute
-            right-0
-            top-1/2
-            -translate-y-1/2
-            w-3
-            h-3
-            border-t-[3px]
-            border-r-[3px]
-            border-[#446C66]
-            rotate-45
-          "
+          absolute
+          right-0
+          top-1/2
+          -translate-y-1/2
+          w-3
+          h-3
+          border-t-[3px]
+          border-r-[3px]
+          border-[#446C66]
+          rotate-45
+        "
                 />
               </div>
             </div>
-
-            {/* ===================================================== */}
-            {/* STEP 3 */}
-            {/* ===================================================== */}
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -1107,18 +983,18 @@ export default function Home() {
               className="relative w-[240px]"
             >
               <p className="font-black text-lg mb-5 text-[#234EA0]">
-                Feature Extraction
+                Ekstraksi Fitur
               </p>
 
               <div
                 className="
-          border-2
-          border-dashed
-          border-[#7db4ff]
-          rounded-[22px]
-          bg-white
-          p-5
-        "
+        border-2
+        border-dashed
+        border-[#7db4ff]
+        rounded-[22px]
+        bg-white
+        p-5
+      "
               >
                 <div className="flex justify-center gap-3 mb-6">
                   {[130, 110, 85, 60].map((h, i) => (
@@ -1136,34 +1012,34 @@ export default function Home() {
                         height: `${h}px`,
                       }}
                       className="
-                w-10
-                rounded-t-xl
-                bg-gradient-to-b
-                from-[#8cc4ff]
-                to-[#4e8dd6]
-              "
+              w-10
+              rounded-t-xl
+              bg-gradient-to-b
+              from-[#8cc4ff]
+              to-[#4e8dd6]
+            "
                     />
                   ))}
                 </div>
 
                 <div className="space-y-3">
                   {[
-                    "Convolutional Layers",
-                    "Global Average Pooling",
-                    "Feature Vector",
+                    "Lapisan Konvolusi",
+                    "Pooling Rata-rata Global",
+                    "Vektor Fitur",
                   ].map((item) => (
                     <div
                       key={item}
                       className="
-                border
-                border-[#b8d7ff]
-                rounded-xl
-                py-2
-                px-3
-                text-center
-                font-semibold
-                text-sm
-              "
+              border
+              border-[#b8d7ff]
+              rounded-xl
+              py-2
+              px-3
+              text-center
+              font-semibold
+              text-sm
+            "
                     >
                       {item}
                     </div>
@@ -1172,37 +1048,31 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* ARROW */}
-
             <div className="pt-[155px] shrink-0">
               <div
                 className="
-          w-10
-          h-[3px]
-          bg-[#446C66]
-          relative
-        "
+        w-10
+        h-[3px]
+        bg-[#446C66]
+        relative
+      "
               >
                 <div
                   className="
-            absolute
-            right-0
-            top-1/2
-            -translate-y-1/2
-            w-3
-            h-3
-            border-t-[3px]
-            border-r-[3px]
-            border-[#446C66]
-            rotate-45
-          "
+          absolute
+          right-0
+          top-1/2
+          -translate-y-1/2
+          w-3
+          h-3
+          border-t-[3px]
+          border-r-[3px]
+          border-[#446C66]
+          rotate-45
+        "
                 />
               </div>
             </div>
-
-            {/* ===================================================== */}
-            {/* STEP 4 */}
-            {/* ===================================================== */}
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -1212,56 +1082,56 @@ export default function Home() {
               className="relative w-[230px]"
             >
               <p className="font-black text-lg mb-5 text-[#2E7D32]">
-                Classification
+                Klasifikasi
               </p>
 
               <div
                 className="
-          border-2
-          border-dashed
-          border-[#8fd88b]
-          rounded-[22px]
-          bg-white
-          p-4
-        "
+        border-2
+        border-dashed
+        border-[#8fd88b]
+        rounded-[22px]
+        bg-white
+        p-4
+      "
               >
                 <div className="space-y-2">
                   {[
-                    "Cardboard",
-                    "Plastic",
-                    "Paper",
-                    "Metal",
-                    "Glass",
-                    "Organic",
+                    "Kardus",
+                    "Plastik",
+                    "Kertas",
+                    "Logam",
+                    "Kaca",
+                    "Organik",
                     "E-Waste",
-                    "Textile",
+                    "Tekstil",
                   ].map((item, i) => (
                     <div
                       key={item}
                       className="
-                flex
-                items-center
-                gap-3
-                border
-                border-[#d5f0d2]
-                rounded-xl
-                px-3
-                py-2
-              "
+              flex
+              items-center
+              gap-3
+              border
+              border-[#d5f0d2]
+              rounded-xl
+              px-3
+              py-2
+            "
                     >
                       <div
                         className="
-                  w-7
-                  h-7
-                  rounded-full
-                  bg-[#7BBF6A]
-                  flex
-                  items-center
-                  justify-center
-                  text-white
-                  text-xs
-                  font-black
-                "
+                w-7
+                h-7
+                rounded-full
+                bg-[#7BBF6A]
+                flex
+                items-center
+                justify-center
+                text-white
+                text-xs
+                font-black
+              "
                       >
                         {i + 1}
                       </div>
@@ -1273,37 +1143,31 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* ARROW */}
-
             <div className="pt-[155px] shrink-0">
               <div
                 className="
-          w-10
-          h-[3px]
-          bg-[#446C66]
-          relative
-        "
+        w-10
+        h-[3px]
+        bg-[#446C66]
+        relative
+      "
               >
                 <div
                   className="
-            absolute
-            right-0
-            top-1/2
-            -translate-y-1/2
-            w-3
-            h-3
-            border-t-[3px]
-            border-r-[3px]
-            border-[#446C66]
-            rotate-45
-          "
+          absolute
+          right-0
+          top-1/2
+          -translate-y-1/2
+          w-3
+          h-3
+          border-t-[3px]
+          border-r-[3px]
+          border-[#446C66]
+          rotate-45
+        "
                 />
               </div>
             </div>
-
-            {/* ===================================================== */}
-            {/* STEP 5 */}
-            {/* ===================================================== */}
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -1312,231 +1176,128 @@ export default function Home() {
               viewport={{ once: true }}
               className="relative w-[200px]"
             >
-              <p className="font-black text-lg mb-5 text-[#7B1FA2]">
-                Predicted
-              </p>
+              <p className="font-black text-lg mb-5 text-[#7B1FA2]">Prediksi</p>
 
               <div
                 className="
-          border-2
-          border-dashed
-          border-[#c78cff]
-          rounded-[22px]
-          bg-white
-          p-5
-          text-center
-        "
+        border-2
+        border-dashed
+        border-[#c78cff]
+        rounded-[22px]
+        bg-white
+        p-5
+        text-center
+      "
               >
                 <div
                   className="
-            w-28
-            h-28
-            rounded-full
-            bg-[#4da3ff]
-            mx-auto
-            flex
-            items-center
-            justify-center
-            text-5xl
-            text-white
-            mb-6
-          "
+          w-28
+          h-28
+          rounded-full
+          bg-[#4da3ff]
+          mx-auto
+          flex
+          items-center
+          justify-center
+          text-5xl
+          text-white
+          mb-6
+        "
                 >
                   ♻️
                 </div>
 
-                <h3 className="text-2xl font-black uppercase">Plastic</h3>
+                <h3 className="text-2xl font-black uppercase">Plastik</h3>
 
                 <p className="mt-3 text-gray-500 text-xs leading-6">
-                  Predicted Waste Category
+                  Kategori Sampah Prediksi
                 </p>
               </div>
             </motion.div>
 
-            {/* ARROW */}
-
             <div className="pt-[155px] shrink-0">
               <div
                 className="
-          w-10
-          h-[3px]
-          bg-[#446C66]
-          relative
-        "
+        w-10
+        h-[3px]
+        bg-[#446C66]
+        relative
+      "
               >
                 <div
                   className="
-            absolute
-            right-0
-            top-1/2
-            -translate-y-1/2
-            w-3
-            h-3
-            border-t-[3px]
-            border-r-[3px]
-            border-[#446C66]
-            rotate-45
-          "
+          absolute
+          right-0
+          top-1/2
+          -translate-y-1/2
+          w-3
+          h-3
+          border-t-[3px]
+          border-r-[3px]
+          border-[#446C66]
+          rotate-45
+        "
                 />
               </div>
             </div>
-
-            {/* ===================================================== */}
-            {/* STEP 6 */}
-            {/* ===================================================== */}
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
               viewport={{ once: true }}
-              className="relative w-[210px]"
-            >
-              <p className="font-black text-lg mb-5 text-[#E65100]">
-                Recommendation
-              </p>
-
-              <div
-                className="
-          border-2
-          border-dashed
-          border-[#ffb16d]
-          rounded-[22px]
-          bg-white
-          p-5
-          flex
-          flex-col
-          items-center
-          justify-center
-          min-h-[400px]
-        "
-              >
-                <motion.div
-                  animate={{
-                    y: [0, -8, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                  className="
-            w-24
-            h-24
-            rounded-full
-            bg-[#ff7a00]
-            flex
-            items-center
-            justify-center
-            text-white
-            text-5xl
-          "
-                >
-                  🛢️
-                </motion.div>
-
-                <p
-                  className="
-            mt-6
-            text-center
-            text-gray-600
-            text-xs
-            leading-7
-          "
-                >
-                  Mapping kategori sampah dan rekomendasi daur ulang.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* ARROW */}
-
-            <div className="pt-[155px] shrink-0">
-              <div
-                className="
-          w-10
-          h-[3px]
-          bg-[#446C66]
-          relative
-        "
-              >
-                <div
-                  className="
-            absolute
-            right-0
-            top-1/2
-            -translate-y-1/2
-            w-3
-            h-3
-            border-t-[3px]
-            border-r-[3px]
-            border-[#446C66]
-            rotate-45
-          "
-                />
-              </div>
-            </div>
-
-            {/* ===================================================== */}
-            {/* STEP 7 */}
-            {/* ===================================================== */}
-
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              viewport={{ once: true }}
               className="relative w-[250px]"
             >
               <p className="font-black text-lg mb-5 text-[#00838F]">
-                Craft Recommendation
+                Rekomendasi Kerajinan
               </p>
 
               <div
                 className="
-          border-2
-          border-dashed
-          border-[#7bd5dd]
-          rounded-[22px]
-          bg-white
-          p-4
-        "
+        border-2
+        border-dashed
+        border-[#7bd5dd]
+        rounded-[22px]
+        bg-white
+        p-4
+      "
               >
                 <div className="space-y-4">
                   {[
                     {
-                      title: "Flower Pot",
+                      title: "Pot Bunga",
                       img: "/img/botol_plastik_pot_bunga.png",
                     },
                     {
-                      title: "Pencil Holder",
+                      title: "Tempat Pensil",
                       img: "/img/botol_plastik_lampu_kamar.png",
                     },
                     {
-                      title: "Eco Brick",
+                      title: "Batu Ramah Lingkungan",
                       img: "/img/botol_plastik_anjing.png",
                     },
                   ].map((item) => (
                     <div
                       key={item.title}
                       className="
-                flex
-                items-center
-                gap-3
-                border
-                border-black/10
-                rounded-2xl
-                p-3
-              "
+              flex
+              items-center
+              gap-3
+              border
+              border-black/10
+              rounded-2xl
+              p-3
+            "
                     >
                       <div
                         className="
-                  w-16
-                  h-16
-                  rounded-xl
-                  overflow-hidden
-                  bg-[#f3f3f3]
-                  shrink-0
-                "
+                w-16
+                h-16
+                rounded-xl
+                overflow-hidden
+                bg-[#f3f3f3]
+                shrink-0
+              "
                       >
                         <Image
                           src={item.img}
@@ -1553,7 +1314,7 @@ export default function Home() {
                         </h4>
 
                         <p className="text-xs text-gray-500 mt-1">
-                          Recycled plastic waste
+                          Limbah plastik daur ulang
                         </p>
                       </div>
                     </div>
@@ -1564,6 +1325,168 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section
+        className="
+    relative
+    min-h-screen
+    snap-start
+    bg-[#faf9f6]
+    overflow-hidden
+    flex
+    items-center
+    justify-center
+    px-8
+  "
+      >
+        {/* WATERMARK */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <h2 className="text-[13vw] font-black uppercase text-black/[0.03]">
+            BEGIN
+          </h2>
+        </div>
+
+        <div className="relative z-10 max-w-4xl w-full">
+          {/* LABEL */}
+          <div className="flex items-center gap-4 justify-center mb-8">
+            <div className="w-10 h-px bg-black/20" />
+            <p className="uppercase tracking-[0.4em] text-[11px] text-gray-400">
+              AI Waste Recognition
+            </p>
+            <div className="w-10 h-px bg-black/20" />
+          </div>
+
+          {/* TITLE */}
+          <div className="text-center">
+            <h2
+              className="
+          text-4xl
+          md:text-6xl
+          font-black
+          uppercase
+          leading-[0.95]
+        "
+            >
+              Sampahmu
+              <br />
+              Belum Berakhir.
+            </h2>
+
+            <p
+              className="
+          mt-8
+          max-w-2xl
+          mx-auto
+          text-gray-500
+          leading-8
+        "
+            >
+              Ambil gambar dan biarkan AI membantu mengenali kategori sampah
+              serta memberikan rekomendasi pengelolaan yang lebih bijak dan
+              bernilai melalui ekonomi sirkular.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-20 grid md:grid-cols-2 gap-6">
+            {/* MULAI PINDAI */}
+            <a
+              href="/scan"
+              className="
+          group
+          bg-white
+          border
+          border-black/10
+          px-8
+          py-6
+          transition-all
+          duration-300
+          hover:border-black
+          hover:-translate-y-1
+        "
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400 mb-3">
+                    AI Detection
+                  </p>
+
+                  <h3 className="text-xl font-black uppercase">Mulai Pindai</h3>
+                </div>
+
+                <div className="text-2xl group-hover:translate-x-2 transition">
+                  →
+                </div>
+              </div>
+            </a>
+
+            {/* BANK SAMPAH */}
+            <a
+              href="/bank-sampah"
+              className="
+          group
+          bg-white
+          border
+          border-black/10
+          px-8
+          py-6
+          transition-all
+          duration-300
+          hover:border-black
+          hover:-translate-y-1
+        "
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400 mb-3">
+                    Circular Economy
+                  </p>
+
+                  <h3 className="text-xl font-black uppercase">Bank Sampah</h3>
+                </div>
+
+                <div className="text-2xl group-hover:translate-x-2 transition">
+                  ↗
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {/* DIVIDER */}
+          <div className="w-full h-px bg-black/10 mt-20 mb-12" />
+
+          {/* STATS */}
+          <div className="flex justify-center gap-16">
+            <div className="text-center">
+              <h3 className="text-3xl font-black">8</h3>
+
+              <p className="text-[11px] uppercase tracking-[0.35em] text-gray-400 mt-2">
+                Kategori
+              </p>
+            </div>
+
+            <div className="text-center">
+              <h3 className="text-3xl font-black">98%</h3>
+
+              <p className="text-[11px] uppercase tracking-[0.35em] text-gray-400 mt-2">
+                Akurasi
+              </p>
+            </div>
+
+            <div className="text-center">
+              <h3 className="text-3xl font-black">∞</h3>
+
+              <p className="text-[11px] uppercase tracking-[0.35em] text-gray-400 mt-2">
+                Potensi
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="snap-start">
+        <Footer />
+      </div>
     </main>
   );
 }

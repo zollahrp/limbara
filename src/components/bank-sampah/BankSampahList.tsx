@@ -18,6 +18,7 @@ interface Props {
   cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
 }
 
+// apa aja
 export default function BankSampahList({ results, selectedId, onSelect, cardRefs }: Props) {
   return (
     <div className="lg:w-[380px] flex-shrink-0 overflow-y-auto pr-2 space-y-3 scrollbar-thin">

@@ -20,11 +20,17 @@ export interface ScanErrorResponse {
   message: string;
 }
 
+export interface IdeDaurUlang {
+  judul_ide: string;
+  bahan_bahan: string[];
+  tahapan_pembuatan: string[];
+}
+
 // Tambahkan ini di file types yang sudah kamu buat sebelumnya
 export interface WasteInsightData {
   ringkasan_bahaya: string;
   cara_buang: string;
-  ide_daur_ulang: string[];
+  ide_daur_ulang: IdeDaurUlang[];
   fakta_menarik: string;
   tingkat_bahaya: "rendah" | "sedang" | "tinggi";
   dapat_didaur_ulang: boolean;

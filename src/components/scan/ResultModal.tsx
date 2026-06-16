@@ -105,17 +105,51 @@ export default function ResultModal({ isOpen, onClose, scanData, insightData, is
                     <p className="text-sm font-medium leading-relaxed">{insightData.cara_buang}</p>
                   </div>
 
-                  {/* Ide Daur Ulang */}
+                  {/* Ide Praktis Daur Ulang (UPDATED FORMAT) */}
                   {insightData.dapat_didaur_ulang && insightData.ide_daur_ulang.length > 0 && (
                     <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                      <h4 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2"><Recycle className="w-4 h-4 text-green-600" /> Ide Praktis Daur Ulang</h4>
-                      <ul className="space-y-3">
+                      <h4 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <Recycle className="w-4 h-4 text-green-600" /> Panduan Praktis Daur Ulang
+                      </h4>
+                      
+                      <div className="space-y-6">
                         {insightData.ide_daur_ulang.map((ide, idx) => (
-                          <li key={idx} className="flex gap-3 text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-xl">
-                            <span className="font-black text-green-300 mt-0.5">{idx + 1}.</span> {ide}
-                          </li>
+                          <div key={idx} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                            {/* Judul Ide */}
+                            <h5 className="font-black text-green-800 mb-3 text-sm flex items-center gap-2">
+                              <span className="bg-green-200 text-green-800 w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                {idx + 1}
+                              </span>
+                              {ide.judul_ide}
+                            </h5>
+
+                            {/* Daftar Bahan */}
+                            <div className="mb-4">
+                              <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Bahan yang dibutuhkan:</p>
+                              <div className="flex flex-wrap gap-2">
+                                {ide.bahan_bahan.map((bahan, bIdx) => (
+                                  <span key={bIdx} className="bg-white border border-gray-200 text-gray-600 px-2.5 py-1 rounded-md text-xs font-medium">
+                                    {bahan}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Langkah-langkah */}
+                            <div>
+                              <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Tahapan Pembuatan:</p>
+                              <ul className="space-y-2">
+                                {ide.tahapan_pembuatan.map((tahap, tIdx) => (
+                                  <li key={tIdx} className="text-sm text-gray-600 leading-relaxed flex items-start gap-2">
+                                    <span className="text-green-500 font-bold mt-0.5">•</span>
+                                    <span>{tahap}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
                     </div>
                   )}
 

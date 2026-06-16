@@ -55,14 +55,14 @@ export default function FloatingBottle({ scrollYProgress, showBottle }: Floating
         y: smoothY,
       }}
     >
-      <div className="relative w-[220px] h-[480px] sm:w-[280px] sm:h-[600px] lg:w-[420px] lg:h-[900px]">
+      {/* Container Botol dengan penyesuaian responsif baru */}
+      <div className="relative w-[120px] h-[260px] sm:w-[170px] sm:h-[360px] md:w-[220px] md:h-[480px] lg:w-[320px] lg:h-[700px] xl:w-[420px] xl:h-[900px]">
         <Image
           src="/img/botol_plastik.png"
           alt="Botol Plastik"
           fill
           priority
-          sizes="(max-width: 640px) 220px, (max-width: 1024px) 280px, 420px"
-          className="object-contain select-none drop-shadow-[0_40px_60px_rgba(0,0,0,0.25)]"
+          className="object-contain select-none drop-shadow-[0_25px_40px_rgba(0,0,0,0.25)] lg:drop-shadow-[0_40px_60px_rgba(0,0,0,0.25)]"
         />
       </div>
     </motion.div>

@@ -151,7 +151,7 @@ export default function Navbar() {
               <div className="relative">
                 <button 
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-3 bg-white/50 hover:bg-white border border-gray-200 pl-1.5 pr-4 py-1.5 rounded-full shadow-sm hover:shadow-md transition-all"
+                  className="flex items-center gap-3 bg-white/50 hover:bg-white cursor-pointer border border-gray-200 pl-1.5 pr-4 py-1.5 rounded-full shadow-sm hover:shadow-md transition-all"
                 >
                   {userAvatar ? (
                     <img 

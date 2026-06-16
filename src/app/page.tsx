@@ -219,14 +219,37 @@ export default function Home() {
             y: smoothY,
           }}
         >
-          <div className="relative w-[220px] h-[480px] sm:w-[280px] sm:h-[600px] lg:w-[420px] lg:h-[900px]">
+          <div
+            className="
+    relative
+
+    w-[120px]
+    h-[260px]
+
+    sm:w-[170px]
+    sm:h-[360px]
+
+    md:w-[220px]
+    md:h-[480px]
+
+    lg:w-[320px]
+    lg:h-[700px]
+
+    xl:w-[420px]
+    xl:h-[900px]
+  "
+          >
             <Image
               src="/img/botol_plastik.png"
               alt="Botol Plastik"
               fill
               priority
-              sizes="(max-width: 640px) 220px, (max-width: 1024px) 280px, 420px"
-              className="object-contain select-none drop-shadow-[0_40px_60px_rgba(0,0,0,0.25)]"
+              className="
+      object-contain
+      select-none
+      drop-shadow-[0_25px_40px_rgba(0,0,0,0.25)]
+      lg:drop-shadow-[0_40px_60px_rgba(0,0,0,0.25)]
+    "
             />
           </div>
         </motion.div>
@@ -236,7 +259,7 @@ export default function Home() {
         <Navbar />
 
         {/* LEFT BAR */}
-        <div className="absolute left-0 top-0 h-full w-24 flex flex-col items-center py-8 z-20">
+        <div className="hidden lg:flex absolute left-0 top-0 h-full w-24 flex-col items-center py-8 z-20">
           <div className="w-px flex-1 bg-black/10" />
 
           <div className="rotate-[-90deg] whitespace-nowrap text-[11px] tracking-[0.4em] uppercase text-gray-400">
@@ -248,121 +271,182 @@ export default function Home() {
 
         {/* WATERMARK */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h2 className="text-[13vw] leading-[0.85] font-black uppercase text-green-700/15 text-center">
+          <h2 className="text-[22vw] md:text-[16vw] lg:text-[13vw] leading-[0.85] font-black uppercase text-green-700/15 text-center">
             BOTOL
             <br />
             PLASTIK
           </h2>
         </div>
 
-        {/* BACKGROUND CIRCLE */}
+        {/* CIRCLE */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[750px] h-[750px] rounded-full border border-black/5" />
+          <div className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] lg:w-[750px] lg:h-[750px] rounded-full border border-black/5" />
         </div>
 
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[550px] h-[550px] rounded-full border border-dashed border-black/10" />
+          <div className="w-[220px] h-[220px] md:w-[380px] md:h-[380px] lg:w-[550px] lg:h-[550px] rounded-full border border-dashed border-black/10" />
         </div>
 
         {/* SECTION NUMBER */}
-        <div className="absolute top-32 right-20">
+        <div className="hidden xl:block absolute top-32 right-20">
           <p className="text-[120px] font-black text-black/[0.04]">01</p>
         </div>
 
+        {/* STATS */}
+        <div
+          className="
+      absolute
+      top-[120px]
+      left-1/2
+      -translate-x-1/2
+      flex
+      gap-10
+      z-20
+
+      lg:left-32
+      lg:translate-x-0
+      lg:top-32
+      lg:gap-16
+    "
+        >
+          <div className="text-center lg:text-left">
+            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
+              Weight
+            </p>
+
+            <h3 className="text-xl lg:text-3xl font-black">25g</h3>
+          </div>
+
+          <div className="text-center lg:text-left">
+            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
+              Category
+            </p>
+
+            <h3 className="text-xl lg:text-3xl font-black">PET</h3>
+          </div>
+        </div>
+
         {/* TOP RIGHT INFO */}
-        <div className="absolute top-36 right-24 max-w-[260px]">
-          <p className="uppercase tracking-[0.4em] text-[11px] text-gray-400 mb-4">
+        <div
+          className="
+      absolute
+      top-[190px]
+      left-1/2
+      -translate-x-1/2
+      text-center
+      max-w-[300px]
+      z-20
+
+      lg:right-24
+      lg:left-auto
+      lg:translate-x-0
+      lg:top-36
+      lg:text-left
+    "
+        >
+          <p className="uppercase tracking-[0.4em] text-[10px] text-gray-400 mb-4">
             Material Exploration
           </p>
 
-          <p className="leading-7 text-gray-600">
+          <p className="leading-6 text-sm text-gray-600">
             Botol plastik PET merupakan material ringan yang memiliki potensi
             untuk didaur ulang menjadi berbagai produk bernilai.
           </p>
         </div>
 
-        {/* BOTTOM TITLE */}
-        <div className="absolute bottom-20 left-32 z-20">
-          <p className="italic text-xl text-gray-500 mb-3">Unlimited Recycle</p>
+        {/* CTA */}
+        <a
+          href="/scan"
+          className="
+      group
+      absolute
+      left-1/2
+      -translate-x-1/2
+      bottom-[210px]
 
-          <h3 className="text-5xl sm:text-6xl lg:text-8xl font-black uppercase leading-[0.9]">
+      lg:left-auto
+      lg:right-24
+      lg:translate-x-0
+      lg:bottom-28
+
+      bg-[#446C66]
+      text-white
+      px-5
+      py-5
+      lg:px-8
+      lg:py-7
+
+      rounded-3xl
+      shadow-[18px_18px_0px_rgba(0,0,0,0.08)]
+
+      transition-all
+      duration-300
+      hover:-translate-y-2
+      z-20
+    "
+        >
+          <p className="text-[9px] uppercase tracking-[0.4em] opacity-70 mb-3">
+            AI Waste Recognition
+          </p>
+
+          <div className="flex items-center gap-5">
+            <div>
+              <h4 className="text-xl sm:text-2xl lg:text-3xl font-black uppercase leading-none">
+                Coba Pindai
+                <br />
+                Sekarang
+              </h4>
+            </div>
+
+            <div className="text-3xl group-hover:translate-x-2 transition">
+              →
+            </div>
+          </div>
+        </a>
+
+        {/* BOTTOM TITLE */}
+        <div
+          className="
+      absolute
+      bottom-8
+      left-1/2
+      -translate-x-1/2
+      z-20
+      text-center
+
+      lg:left-32
+      lg:translate-x-0
+      lg:bottom-20
+      lg:text-left
+    "
+        >
+          <p className="italic text-gray-500 mb-3">Unlimited Recycle</p>
+
+          <h3 className="text-3xl sm:text-5xl lg:text-8xl font-black uppercase leading-[0.9]">
             Botol
             <br />
             Plastik
           </h3>
 
-          <div className="flex items-center gap-5 mt-8">
-            <div className="w-16 h-px bg-black" />
+          <div
+            className="
+        flex
+        flex-col
+        items-center
+        gap-4
+        mt-4
 
-            <p className="text-gray-500 max-w-[300px] leading-7">
+        lg:flex-row
+        lg:items-start
+        lg:mt-8
+      "
+          >
+            <div className="w-12 lg:w-16 h-px bg-black" />
+
+            <p className="max-w-[300px] text-sm leading-6 text-gray-500">
               Material PET yang dapat digunakan kembali melalui proses daur
               ulang dan ekonomi sirkular.
             </p>
-          </div>
-        </div>
-
-        {/* FLOATING CTA */}
-<a
-  href="/scan"
-  className="
-    group
-    absolute
-    bottom-28
-    right-24
-    bg-[#446C66]
-    text-white
-    px-8
-    py-7
-    rotate-[-4deg]
-    shadow-[18px_18px_0px_rgba(0,0,0,0.08)]
-    transition-all
-    duration-300
-    hover:-translate-y-2
-    hover:rotate-0
-    z-20
-  "
->
-  <p className="text-[10px] tracking-[0.4em] uppercase mb-3 opacity-70">
-    AI Waste Recognition
-  </p>
-
-  <div className="flex items-center gap-6">
-    <div>
-      <h4 className="text-3xl font-black uppercase leading-none">
-        Coba Pindai
-        <br />
-        Sekarang
-      </h4>
-    </div>
-
-    <div
-      className="
-        text-4xl
-        group-hover:translate-x-2
-        transition
-      "
-    >
-      →
-    </div>
-  </div>
-</a>
-
-        {/* STATS */}
-        <div className="absolute left-32 top-32 flex gap-16">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
-              Weight
-            </p>
-
-            <h3 className="text-3xl font-black">25g</h3>
-          </div>
-
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
-              Category
-            </p>
-
-            <h3 className="text-3xl font-black">PET</h3>
           </div>
         </div>
       </section>

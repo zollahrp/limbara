@@ -7,7 +7,8 @@ import { bankSampahList } from "@/constants/BankSampahData";
 
 import BankSampahHeader from "@/components/bank-sampah/BankSampahHeader";
 import BankSampahControls from "@/components/bank-sampah/BankSampahControls";
-import BankSampahList, { UI_BankSampah } from "@/components/bank-sampah/BankSampahList";
+import BankSampahList from "@/components/bank-sampah/BankSampahList";
+import { UI_BankSampah } from "@/types/BankSampah";
 import EmptyState from "@/components/bank-sampah/EmptyState";
 
 const MapView = dynamic(() => import("@/components/BankSampahMap"), {

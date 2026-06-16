@@ -57,19 +57,18 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
 
     Swal.fire({
-      title: "Apakah kamu yakin?",
-      text: "Kamu akan keluar dari sesi saat ini.",
+      title: "Apakah Anda yakin ingin keluar?",
+      text: "Anda akan keluar dari akun Anda saat ini.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#166534", // Warna hijau khas Limbara (green-800)
-      cancelButtonColor: "#ef4444", // Warna merah (red-500)
-      confirmButtonText: "Ya, Keluar!",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Ya, keluar",
       cancelButtonText: "Batal",
-      shape: "rounded",
       customClass: {
         popup: "rounded-3xl",
-        confirmButton: "rounded-xl px-6 py-2.5 font-bold",
-        cancelButton: "rounded-xl px-6 py-2.5 font-bold"
+        confirmButton: "rounded-xl px-6 py-2",
+        cancelButton: "rounded-xl px-6 py-2"
       }
     }).then(async (result) => {
       if (result.isConfirmed) {

@@ -256,45 +256,45 @@ export default function Home() {
       )}
 
       <section className="relative h-screen snap-start overflow-hidden bg-white">
-        <Navbar />
+  <Navbar />
 
-        {/* LEFT BAR */}
-        <div className="hidden lg:flex absolute left-0 top-0 h-full w-24 flex-col items-center py-8 z-20">
-          <div className="w-px flex-1 bg-black/10" />
+  {/* LEFT BAR */}
+  <div className="hidden lg:flex absolute left-0 top-0 h-full w-24 flex-col items-center py-8 z-20">
+    <div className="w-px flex-1 bg-black/10" />
 
-          <div className="rotate-[-90deg] whitespace-nowrap text-[11px] tracking-[0.4em] uppercase text-gray-400">
-            Circular Material
-          </div>
+    <div className="rotate-[-90deg] whitespace-nowrap text-[11px] tracking-[0.4em] uppercase text-gray-400">
+      Circular Material
+    </div>
 
-          <div className="w-px flex-1 bg-black/10" />
-        </div>
+    <div className="w-px flex-1 bg-black/10" />
+  </div>
 
-        {/* WATERMARK */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h2 className="text-[22vw] md:text-[16vw] lg:text-[13vw] leading-[0.85] font-black uppercase text-green-700/15 text-center">
-            BOTOL
-            <br />
-            PLASTIK
-          </h2>
-        </div>
+  {/* WATERMARK */}
+  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <h2 className="text-[22vw] md:text-[16vw] lg:text-[13vw] leading-[0.85] font-black uppercase text-green-700/15 text-center">
+      BOTOL
+      <br />
+      PLASTIK
+    </h2>
+  </div>
 
-        {/* CIRCLE */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] lg:w-[750px] lg:h-[750px] rounded-full border border-black/5" />
-        </div>
+  {/* CIRCLE */}
+  <div className="absolute inset-0 flex items-center justify-center">
+    <div className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] lg:w-[750px] lg:h-[750px] rounded-full border border-black/5" />
+  </div>
 
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[220px] h-[220px] md:w-[380px] md:h-[380px] lg:w-[550px] lg:h-[550px] rounded-full border border-dashed border-black/10" />
-        </div>
+  <div className="absolute inset-0 flex items-center justify-center">
+    <div className="w-[220px] h-[220px] md:w-[380px] md:h-[380px] lg:w-[550px] lg:h-[550px] rounded-full border border-dashed border-black/10" />
+  </div>
 
-        {/* SECTION NUMBER */}
-        <div className="hidden xl:block absolute top-32 right-20">
-          <p className="text-[120px] font-black text-black/[0.04]">01</p>
-        </div>
+  {/* SECTION NUMBER */}
+  <div className="hidden xl:block absolute top-32 right-20">
+    <p className="text-[120px] font-black text-black/[0.04]">01</p>
+  </div>
 
-        {/* STATS */}
-        <div
-          className="
+  {/* STATS */}
+  <div
+    className="
       absolute
       top-[120px]
       left-1/2
@@ -308,33 +308,33 @@ export default function Home() {
       lg:top-32
       lg:gap-16
     "
-        >
-          <div className="text-center lg:text-left">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
-              Weight
-            </p>
+  >
+    <div className="text-center lg:text-left">
+      <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
+        Weight
+      </p>
 
-            <h3 className="text-xl lg:text-3xl font-black">25g</h3>
-          </div>
+      <h3 className="text-xl lg:text-3xl font-black">25g</h3>
+    </div>
 
-          <div className="text-center lg:text-left">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
-              Category
-            </p>
+    <div className="text-center lg:text-left">
+      <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
+        Category
+      </p>
 
-            <h3 className="text-xl lg:text-3xl font-black">PET</h3>
-          </div>
-        </div>
+      <h3 className="text-xl lg:text-3xl font-black">PET</h3>
+    </div>
+  </div>
 
-        {/* TOP RIGHT INFO */}
-        <div
-          className="
+  {/* TOP RIGHT INFO */}
+  <div
+    className="
       absolute
       top-[190px]
       left-1/2
       -translate-x-1/2
       text-center
-      max-w-[300px]
+      max-w-[260px]
       z-20
 
       lg:right-24
@@ -343,21 +343,21 @@ export default function Home() {
       lg:top-36
       lg:text-left
     "
-        >
-          <p className="uppercase tracking-[0.4em] text-[10px] text-gray-400 mb-4">
-            Material Exploration
-          </p>
+  >
+    <p className="uppercase tracking-[0.4em] text-[10px] text-gray-400 mb-4">
+      Material Exploration
+    </p>
 
-          <p className="leading-6 text-sm text-gray-600">
-            Botol plastik PET merupakan material ringan yang memiliki potensi
-            untuk didaur ulang menjadi berbagai produk bernilai.
-          </p>
-        </div>
+    <p className="leading-6 text-sm text-gray-600">
+      Material PET ringan yang dapat didaur ulang menjadi
+      berbagai produk bernilai.
+    </p>
+  </div>
 
-        {/* CTA */}
-        <a
-          href="/scan"
-          className="
+  {/* CTA */}
+  <a
+    href="/scan"
+    className="
       group
       absolute
       left-1/2
@@ -369,14 +369,18 @@ export default function Home() {
       lg:translate-x-0
       lg:bottom-28
 
+      flex
+      items-center
+      gap-5
+
       bg-[#446C66]
       text-white
-      px-5
-      py-5
-      lg:px-8
-      lg:py-7
 
-      rounded-3xl
+      px-7
+      py-4
+
+      rounded-full
+
       shadow-[18px_18px_0px_rgba(0,0,0,0.08)]
 
       transition-all
@@ -384,29 +388,19 @@ export default function Home() {
       hover:-translate-y-2
       z-20
     "
-        >
-          <p className="text-[9px] uppercase tracking-[0.4em] opacity-70 mb-3">
-            AI Waste Recognition
-          </p>
+  >
+    <span className="text-lg lg:text-xl font-black uppercase">
+      Coba Pindai
+    </span>
 
-          <div className="flex items-center gap-5">
-            <div>
-              <h4 className="text-xl sm:text-2xl lg:text-3xl font-black uppercase leading-none">
-                Coba Pindai
-                <br />
-                Sekarang
-              </h4>
-            </div>
+    <span className="text-2xl group-hover:translate-x-2 transition">
+      →
+    </span>
+  </a>
 
-            <div className="text-3xl group-hover:translate-x-2 transition">
-              →
-            </div>
-          </div>
-        </a>
-
-        {/* BOTTOM TITLE */}
-        <div
-          className="
+  {/* BOTTOM TITLE */}
+  <div
+    className="
       absolute
       bottom-8
       left-1/2
@@ -419,17 +413,19 @@ export default function Home() {
       lg:bottom-20
       lg:text-left
     "
-        >
-          <p className="italic text-gray-500 mb-3">Unlimited Recycle</p>
+  >
+    <p className="italic text-gray-500 mb-3">
+      Unlimited Recycle
+    </p>
 
-          <h3 className="text-3xl sm:text-5xl lg:text-8xl font-black uppercase leading-[0.9]">
-            Botol
-            <br />
-            Plastik
-          </h3>
+    <h3 className="text-3xl sm:text-5xl lg:text-8xl font-black uppercase leading-[0.9]">
+      Botol
+      <br />
+      Plastik
+    </h3>
 
-          <div
-            className="
+    <div
+      className="
         flex
         flex-col
         items-center
@@ -440,16 +436,15 @@ export default function Home() {
         lg:items-start
         lg:mt-8
       "
-          >
-            <div className="w-12 lg:w-16 h-px bg-black" />
+    >
+      <div className="w-12 lg:w-16 h-px bg-black" />
 
-            <p className="max-w-[300px] text-sm leading-6 text-gray-500">
-              Material PET yang dapat digunakan kembali melalui proses daur
-              ulang dan ekonomi sirkular.
-            </p>
-          </div>
-        </div>
-      </section>
+      <p className="max-w-[280px] text-sm leading-6 text-gray-500">
+        Material PET yang mendukung ekonomi sirkular dan dapat digunakan kembali.
+      </p>
+    </div>
+  </div>
+</section>
 
       <section className="relative h-screen snap-start bg-[#faf9f6] px-5 sm:px-10 lg:px-20 flex items-center overflow-hidden">
         <div className="absolute right-10 top-10 text-[18vw] font-black text-black/[0.03] leading-none pointer-events-none">

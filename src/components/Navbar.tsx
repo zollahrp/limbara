@@ -1,117 +1,228 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Deteksi scroll untuk mengubah tampilan navbar menjadi glassmorphism
   useEffect(() => {
+    const container = document.querySelector("main");
+
+    if (!container) return;
+
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(container.scrollTop > 80);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
   }, []);
+
+  const menus = [
+    {
+      name: "Beranda",
+      href: "/",
+    },
+    {
+      name: "Scan",
+      href: "/scan",
+    },
+    {
+      name: "Bank Sampah",
+      href: "/bank-sampah",
+    },
+  ];
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/80 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.05)] py-3"
-          : "bg-transparent py-6"
-      }`}
+      initial={{
+        y: -100,
+        opacity: 0,
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+      }}
+      transition={{
+        duration: 0.8,
+      }}
+      className={`
+      fixed
+      top-0
+      left-0
+      w-full
+      z-50
+      transition-all
+      duration-500
+      ${isScrolled ? "px-6 lg:px-20 pt-5" : "px-8 lg:px-20 pt-8"}
+      `}
     >
-      <div className="container mx-auto px-6 sm:px-10 lg:px-16 flex items-center justify-between">
-        
-        {/* AREA LOGO */}
-        <Link href="/" className="flex items-center gap-2">
+      <div
+        className={`
+      mx-auto
+      flex
+      items-center
+      justify-between
+
+      transition-all
+      duration-500
+
+      ${
+        isScrolled
+          ? "max-w-6xl bg-white/80 backdrop-blur-xl border border-black/10 shadow-xl px-8 py-3 rounded-full"
+          : "max-w-full"
+      }
+
+      `}
+      >
+        {/* LOGO */}
+
+        <Link href="/" className="relative">
           <Image
-            src="/img/logo/limbara.png" 
-            alt="Limbara Logo"
-            width={700}
-            height={250}
-            // Ubah h-8 menjadi h-12 (48px) atau h-16 (64px) agar jauh lebih besar
-            className="object-contain h-20 sm:h-20 lg:h-[120px] w-auto drop-shadow-sm"
+            src="/img/logo/limbara.png"
+            alt="Limbara"
+            width={300}
+            height={100}
             priority
+            className="
+          object-contain
+          w-auto
+          h-8
+          lg:h-10
+          "
           />
         </Link>
 
-        {/* AREA MENU (DESKTOP) */}
-        <div className="hidden md:flex items-center gap-10">
-          <Link
-            href="/"
-            className="text-xs uppercase tracking-[0.3em] font-bold text-gray-800 hover:text-green-700 transition-colors"
-          >
-            Beranda
-          </Link>
-          <Link
-            href="/scan"
-            className="text-xs uppercase tracking-[0.3em] font-bold text-gray-800 hover:text-green-700 transition-colors"
-          >
-            Scan
-          </Link>
-          <Link
-            href="/bank-sampah"
-            className="text-xs uppercase tracking-[0.3em] font-bold text-gray-800 hover:text-green-700 transition-colors"
-          >
-            Bank Sampah
-          </Link>
+        {/* MENU */}
+
+        <div
+          className="
+        hidden
+        md:flex
+        items-center
+        gap-12
+        "
+        >
+          {menus.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="
+            group
+            relative
+            text-[11px]
+            uppercase
+            tracking-[0.35em]
+            font-bold
+            text-gray-800
+            "
+            >
+              {item.name}
+
+              <span
+                className="
+            absolute
+            left-0
+            -bottom-2
+            h-[2px]
+            w-0
+            bg-green-700
+            transition-all
+            duration-300
+            group-hover:w-full
+            "
+              />
+            </Link>
+          ))}
         </div>
 
-        {/* AREA TOMBOL LOGIN & HAMBURGER (MOBILE) */}
-        <div className="flex items-center gap-4">
-          <button className="hidden sm:block bg-green-800 hover:bg-green-700 text-white px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-all hover:shadow-lg hover:-translate-y-0.5">
+        {/* LOGIN */}
+
+        <div className="flex items-center gap-5">
+          <button
+            className="
+        hidden
+        sm:block
+        relative
+        overflow-hidden
+        bg-green-800
+        text-white
+        px-8
+        py-3
+        rounded-full
+        text-[11px]
+        font-bold
+        uppercase
+        tracking-[0.3em]
+
+        hover:bg-green-700
+        transition
+
+        "
+          >
             Login
           </button>
 
-          {/* Tombol Mobile Menu */}
-          <button 
-            className="block md:hidden text-2xl text-green-900"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="
+        md:hidden
+        text-2xl
+        "
           >
             ☰
           </button>
         </div>
       </div>
 
-      {/* MOBILE MENU DROPDOWN */}
-      {isMobileMenuOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 md:hidden flex flex-col items-center py-6 gap-6"
+      {/* MOBILE */}
+
+      {menuOpen && (
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: -20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          className="
+        mt-4
+        bg-white
+        rounded-3xl
+        shadow-xl
+        border
+        p-8
+        flex
+        flex-col
+        items-center
+        gap-6
+        md:hidden
+        "
         >
-          <Link
-            href="/"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="text-sm uppercase tracking-[0.3em] font-bold text-gray-800 hover:text-green-700"
-          >
-            Beranda
-          </Link>
-          <Link
-            href="/scan"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="text-sm uppercase tracking-[0.3em] font-bold text-gray-800 hover:text-green-700"
-          >
-            Scan
-          </Link>
-          <button className="bg-green-800 text-white px-10 py-3 text-sm font-bold uppercase tracking-[0.2em] mt-2 w-11/12">
-            Login
-          </button>
+          {menus.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+              className="
+            uppercase
+            tracking-[0.3em]
+            text-xs
+            font-bold
+            "
+            >
+              {item.name}
+            </Link>
+          ))}
         </motion.div>
       )}
     </motion.nav>

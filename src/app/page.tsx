@@ -10,7 +10,6 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import Navbar from "@/components/Navbar";
-import { useInView } from "framer-motion";
 
 const springConfig = { stiffness: 60, damping: 20 };
 const springConfigWithMass = { ...springConfig, mass: 0.8 };

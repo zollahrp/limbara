@@ -177,9 +177,11 @@ export default function ResultModal({ isOpen, onClose, scanData, insightData, is
                   {scanData.allDetections.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between bg-green-50 px-3 py-2 rounded-xl w-full">
                       <span className="font-bold text-green-900 capitalize">{item.className.replace(/_/g, ' ')}</span>
-                      <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 rounded-md">
-                        {(item.confidence * 100).toFixed(0)}%
-                      </span>
+                      {item.confidence > 0 && (
+                        <span className="text-xs font-bold text-green-700 bg-green-200 px-2 py-1 rounded-md">
+                          {(item.confidence * 100).toFixed(0)}%
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>

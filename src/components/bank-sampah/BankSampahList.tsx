@@ -1,25 +1,6 @@
-export interface UI_BankSampah {
-  id: string;
-  name: string;
-  address: string;
-  category: string;
-  lat: number;          // Diubah dari latitude
-  lng: number;          // Diubah dari longitude
-  phone?: string;       // Properti yang diminta TypeScript
-  opening_hours?: string; 
-  website?: string;
-  google_maps_url: string;
-}
+import { BankSampahListProps } from "@/types/BankSampah";
 
-interface Props {
-  results: UI_BankSampah[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
-  cardRefs: React.MutableRefObject<Record<string, HTMLDivElement | null>>;
-}
-
-// apa aja
-export default function BankSampahList({ results, selectedId, onSelect, cardRefs }: Props) {
+export default function BankSampahList({ results, selectedId, onSelect, cardRefs }: BankSampahListProps) {
   return (
     <div className="lg:w-[380px] flex-shrink-0 overflow-y-auto pr-2 space-y-3 scrollbar-thin">
       {results.map((bank) => (

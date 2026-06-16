@@ -1,12 +1,6 @@
-interface Props {
-  radius: number;
-  onRadiusChange: (r: number) => void;
-  onRequestLocation: () => void;
-  status: string;
-  resultCount: number;
-}
+import { BankSampahControlsProps } from "@/types/BankSampah";
 
-export default function BankSampahControls({ radius, onRadiusChange, onRequestLocation, status, resultCount }: Props) {
+export default function BankSampahControls({ radius, onRadiusChange, onRequestLocation, status, resultCount }: BankSampahControlsProps) {
   return (
     <section className="px-6 sm:px-10 lg:px-16 max-w-screen-xl mx-auto mb-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

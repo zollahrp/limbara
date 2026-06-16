@@ -1,14 +1,6 @@
-export default function EmptyState({
-  icon,
-  title,
-  desc,
-  isError = false,
-}: {
-  icon: string;
-  title: string;
-  desc: string;
-  isError?: boolean;
-}) {
+import { EmptyStateProps } from "@/types/ui"; // Import dari file tipe
+
+export default function EmptyState({ icon, title, desc, isError = false }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-24 px-6 text-center">
       <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm border border-black/5 mb-5 text-4xl">

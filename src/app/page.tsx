@@ -235,27 +235,135 @@ export default function Home() {
       <section className="relative h-screen snap-start overflow-hidden bg-white">
         <Navbar />
 
+        {/* LEFT BAR */}
         <div className="absolute left-0 top-0 h-full w-24 flex flex-col items-center py-8 z-20">
-          <div className="w-px flex-1 bg-black/20" />
-          <button className="text-2xl mb-10">⌕</button>
-          <div className="w-px flex-1 bg-black/20" />
+          <div className="w-px flex-1 bg-black/10" />
+
+          <div className="rotate-[-90deg] whitespace-nowrap text-[11px] tracking-[0.4em] uppercase text-gray-400">
+            Circular Material
+          </div>
+
+          <div className="w-px flex-1 bg-black/10" />
         </div>
 
+        {/* WATERMARK */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h2 className="text-[12vw] leading-[0.85] font-black uppercase text-green-700/20 opacity-90 text-center">
+          <h2 className="text-[13vw] leading-[0.85] font-black uppercase text-green-700/15 text-center">
             BOTOL
             <br />
             PLASTIK
           </h2>
         </div>
 
-        <div className="absolute bottom-16 left-32 z-20">
-          <p className="italic text-2xl mb-2">Unlimited Recycle</p>
-          <h3 className="text-4xl sm:text-5xl lg:text-7xl font-black uppercase leading-none">
+        {/* BACKGROUND CIRCLE */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[750px] h-[750px] rounded-full border border-black/5" />
+        </div>
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-[550px] h-[550px] rounded-full border border-dashed border-black/10" />
+        </div>
+
+        {/* SECTION NUMBER */}
+        <div className="absolute top-32 right-20">
+          <p className="text-[120px] font-black text-black/[0.04]">01</p>
+        </div>
+
+        {/* TOP RIGHT INFO */}
+        <div className="absolute top-36 right-24 max-w-[260px]">
+          <p className="uppercase tracking-[0.4em] text-[11px] text-gray-400 mb-4">
+            Material Exploration
+          </p>
+
+          <p className="leading-7 text-gray-600">
+            Botol plastik PET merupakan material ringan yang memiliki potensi
+            untuk didaur ulang menjadi berbagai produk bernilai.
+          </p>
+        </div>
+
+        {/* BOTTOM TITLE */}
+        <div className="absolute bottom-20 left-32 z-20">
+          <p className="italic text-xl text-gray-500 mb-3">Unlimited Recycle</p>
+
+          <h3 className="text-5xl sm:text-6xl lg:text-8xl font-black uppercase leading-[0.9]">
             Botol
             <br />
             Plastik
           </h3>
+
+          <div className="flex items-center gap-5 mt-8">
+            <div className="w-16 h-px bg-black" />
+
+            <p className="text-gray-500 max-w-[300px] leading-7">
+              Material PET yang dapat digunakan kembali melalui proses daur
+              ulang dan ekonomi sirkular.
+            </p>
+          </div>
+        </div>
+
+        {/* FLOATING CTA */}
+<a
+  href="/scan"
+  className="
+    group
+    absolute
+    bottom-28
+    right-24
+    bg-[#446C66]
+    text-white
+    px-8
+    py-7
+    rotate-[-4deg]
+    shadow-[18px_18px_0px_rgba(0,0,0,0.08)]
+    transition-all
+    duration-300
+    hover:-translate-y-2
+    hover:rotate-0
+    z-20
+  "
+>
+  <p className="text-[10px] tracking-[0.4em] uppercase mb-3 opacity-70">
+    AI Waste Recognition
+  </p>
+
+  <div className="flex items-center gap-6">
+    <div>
+      <h4 className="text-3xl font-black uppercase leading-none">
+        Coba Pindai
+        <br />
+        Sekarang
+      </h4>
+    </div>
+
+    <div
+      className="
+        text-4xl
+        group-hover:translate-x-2
+        transition
+      "
+    >
+      →
+    </div>
+  </div>
+</a>
+
+        {/* STATS */}
+        <div className="absolute left-32 top-32 flex gap-16">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
+              Weight
+            </p>
+
+            <h3 className="text-3xl font-black">25g</h3>
+          </div>
+
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.4em] text-gray-400">
+              Category
+            </p>
+
+            <h3 className="text-3xl font-black">PET</h3>
+          </div>
         </div>
       </section>
 

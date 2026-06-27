@@ -10,6 +10,7 @@ import {
   Download,
   Bookmark,
   Loader2,
+  Share2,
 } from "lucide-react";
 import Image from "next/image";
 import { ScanSuccessResponse, WasteInsightData } from "@/types/scan";
@@ -35,6 +36,7 @@ export default function ResultModal({
   const [user, setUser] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
 
   const supabase = createClient();
   const modalContentRef = useRef<HTMLDivElement>(null);
@@ -155,6 +157,81 @@ export default function ResultModal({
       node.style.height = originalHeight;
       node.style.overflow = originalOverflow;
       setIsDownloading(false);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!modalContentRef.current) return;
+
+    setIsSharing(true);
+
+    const node = modalContentRef.current;
+
+    const originalHeight = node.style.height;
+    const originalOverflow = node.style.overflow;
+
+    node.style.height = `${node.scrollHeight}px`;
+    node.style.overflow = "visible";
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      const dataUrl = await toPng(node, {
+        pixelRatio: 2,
+        backgroundColor: "#F7F8F4",
+        cacheBust: true,
+      });
+
+      node.style.height = originalHeight;
+      node.style.overflow = originalOverflow;
+
+      const blob = await (await fetch(dataUrl)).blob();
+
+      const file = new File([blob], `Limbara_Insight_${Date.now()}.png`, {
+        type: "image/png",
+      });
+
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({
+          title: "Hasil Analisis Limbara",
+          text: "Aku baru saja menganalisis sampah menggunakan Limbara. Yuk lebih peduli lingkungan!",
+          files: [file],
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.origin);
+
+        Swal.fire({
+          icon: "info",
+          title: "Perangkat tidak mendukung Share",
+          text: "Link website Limbara telah disalin ke clipboard.",
+          confirmButtonColor: "#166534",
+          customClass: {
+            popup: "rounded-3xl",
+          },
+        });
+      }
+    } catch (err: any) {
+      if (err?.name !== "AbortError") {
+        console.error(err);
+
+        Swal.fire({
+          icon: "error",
+          title: "Gagal Membagikan",
+          text: "Terjadi kesalahan saat membagikan hasil.",
+          confirmButtonColor: "#ef4444",
+          customClass: {
+            popup: "rounded-3xl",
+          },
+        });
+      }
+    } finally {
+      node.style.height = originalHeight;
+      node.style.overflow = originalOverflow;
+      setIsSharing(false);
     }
   };
 
@@ -479,6 +556,21 @@ export default function ResultModal({
                   <Download className="w-4 h-4" />
                 )}
                 {isDownloading ? "Memproses..." : "Unduh Gambar"}
+              </button>
+
+              {/* Share */}
+              <button
+                onClick={handleShare}
+                disabled={isSharing}
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition-all shadow-md disabled:opacity-70"
+              >
+                {isSharing ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Share2 className="w-4 h-4" />
+                )}
+
+                {isSharing ? "Membagikan..." : "Bagikan"}
               </button>
 
               <button

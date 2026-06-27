@@ -24,7 +24,7 @@ interface Message {
 const GREETING: Message = {
   role: "assistant",
   content:
-    "Halo! Aku Limbara AI 🌱 Tanya apa saja soal sampah, daur ulang, atau cara hidup lebih ramah lingkungan. Aku siap bantu!",
+    "Halo! Aku LimbaBot, asisten virtual dari Limbara. Punya pertanyaan tentang sampah, limbah, daur ulang, atau gaya hidup yang lebih ramah lingkungan? Aku siap membantu!",
 };
 
 // ─── Komponen Bubble ────────────────────────────────────────────────────────
@@ -143,7 +143,7 @@ export default function ChatbotWidget() {
                   <Leaf className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-black text-sm">Limbara AI</p>
+                  <p className="text-white font-black text-sm">LimbaBot</p>
                   <p className="text-green-300 text-[11px]">Asisten Sampah & Lingkungan</p>
                 </div>
               </div>
@@ -219,7 +219,7 @@ export default function ChatbotWidget() {
       {/* ── Floating Button ──────────────────────────────────────── */}
       <motion.button
         onClick={() => setIsOpen((prev) => !prev)}
-        title={isOpen ? "Tutup chat" : "Buka Limbara AI"}
+        title={isOpen ? "Tutup chat" : "Buka LimbaBot"}
         whileHover={{ scale: 1.07 }}
         whileTap={{ scale: 0.95 }}
         className="fixed bottom-6 right-4 sm:right-6 z-50 w-14 h-14 bg-green-800 hover:bg-green-700 text-white rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center"

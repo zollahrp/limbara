@@ -92,7 +92,6 @@ export default function Navbar() {
     { name: "Beranda", href: "/" },
     { name: "Scan", href: "/scan" },
     { name: "Bank Sampah", href: "/bank-sampah" },
-    { name: "Limbara AI", href: "#limbara-ai" },
   ];
 
   // Ekstrak data metadata Google/Email

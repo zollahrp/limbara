@@ -14,6 +14,7 @@ import AIFlowSection from "@/components/home/AIFlowSection";
 import CTASection from "@/components/home/CTASection";
 
 import { SCROLL_THRESHOLDS } from "@/constants/HomeData";
+import ChatbotWidget from "@/components/ Chatbotwidget";
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +40,7 @@ export default function Home() {
       <RecyclableSection />
       <AIFlowSection />
       <CTASection />
+      <ChatbotWidget />
       
       <div className="snap-start">
         <Footer />

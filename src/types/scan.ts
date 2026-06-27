@@ -20,10 +20,28 @@ export interface ScanErrorResponse {
   message: string;
 }
 
+export interface TahapanPembuatan {
+  langkah: number;
+  judul: string;
+  tujuan: string;
+  instruksi: string[];
+  tips: string;
+}
+
 export interface IdeDaurUlang {
   judul_ide: string;
+  deskripsi: string;
+  estimasi_waktu: string;
+  tingkat_kesulitan: "Mudah" | "Sedang" | "Sulit";
+
+  alat_yang_diperlukan: string[];
   bahan_bahan: string[];
-  tahapan_pembuatan: string[];
+  persiapan: string[];
+
+  tahapan_pembuatan: TahapanPembuatan[];
+
+  tips: string[];
+  hasil_akhir: string;
 }
 
 // Tambahkan ini di file types yang sudah kamu buat sebelumnya

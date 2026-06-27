@@ -25,7 +25,6 @@ const MapView = dynamic(() => import("@/components/BankSampahMap"), {
 
 type Status = "idle" | "requesting" | "loading" | "success" | "error" | "denied" | "not_found";
 
-// Fungsi Haversine untuk menghitung jarak (dalam KM) antar dua koordinat
 const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
   const R = 6371; 
   const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -159,10 +158,10 @@ export default function BankSampahPage() {
             <div className="flex-1 min-h-[400px] lg:min-h-0 border border-black/10 rounded-2xl overflow-hidden shadow-sm bg-white">
               {userLocation && (
                 <MapView
-                  banks={results} // Jika tipe UI_BankSampah[] dan BankSampah[] sudah sama, hapus "as any"
+                  banks={results} 
                   userLocation={userLocation}
-                  selectedId={selectedId} // <-- Langsung masukkan tanpa casting ke number
-                  onSelect={(id) => setSelectedId(id)} // <-- id dari MapView sudah pasti string
+                  selectedId={selectedId} 
+                  onSelect={(id) => setSelectedId(id)} 
                 />
               )}
             </div>

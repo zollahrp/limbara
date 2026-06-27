@@ -26,6 +26,9 @@ export interface IdeDaurUlang {
   tahapan_pembuatan: string[];
 }
 
+
+// ssjjssjjss
+
 // Tambahkan ini di file types yang sudah kamu buat sebelumnya
 export interface WasteInsightData {
   ringkasan_bahaya: string;

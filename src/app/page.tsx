@@ -12,6 +12,7 @@ import RebornSection from "@/components/home/RebornSection";
 import RecyclableSection from "@/components/home/RecyclableSection";
 import AIFlowSection from "@/components/home/AIFlowSection";
 import CTASection from "@/components/home/CTASection";
+import ChatbotWidget from "@/components/Chatbotwidget";
 
 import { SCROLL_THRESHOLDS } from "@/constants/HomeData";
 
@@ -39,6 +40,7 @@ export default function Home() {
       <RecyclableSection />
       <AIFlowSection />
       <CTASection />
+      <ChatbotWidget />
       
       <div className="snap-start">
         <Footer />

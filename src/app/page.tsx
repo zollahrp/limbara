@@ -12,7 +12,7 @@ import RebornSection from "@/components/home/RebornSection";
 import RecyclableSection from "@/components/home/RecyclableSection";
 import AIFlowSection from "@/components/home/AIFlowSection";
 import CTASection from "@/components/home/CTASection";
-import ChatbotWidget from "@/components/Chatbotwidget";
+import ChatbotWidget from "@/components/Chat";
 
 import { SCROLL_THRESHOLDS } from "@/constants/HomeData";
 

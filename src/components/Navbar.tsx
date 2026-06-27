@@ -197,7 +197,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link href="/login">
-                <button className="relative overflow-hidden bg-green-800 text-white px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-green-700 transition">
+                <button className="relative overflow-hidden cursor-pointer bg-green-800 text-white px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-green-700 transition">
                   Login
                 </button>
               </Link>

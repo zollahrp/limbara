@@ -151,7 +151,7 @@ export default function Navbar() {
               <div className="relative">
                 <button 
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-3 bg-white/50 hover:bg-white border border-gray-200 pl-1.5 pr-4 py-1.5 rounded-full shadow-sm hover:shadow-md transition-all"
+                  className="flex items-center gap-3 bg-white/50 hover:bg-white cursor-pointer border border-gray-200 pl-1.5 pr-4 py-1.5 rounded-full shadow-sm hover:shadow-md transition-all"
                 >
                   {userAvatar ? (
                     <img 
@@ -197,7 +197,7 @@ export default function Navbar() {
               </div>
             ) : (
               <Link href="/login">
-                <button className="relative overflow-hidden bg-green-800 text-white px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-green-700 transition">
+                <button className="relative overflow-hidden cursor-pointer bg-green-800 text-white px-8 py-3 rounded-full text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-green-700 transition">
                   Login
                 </button>
               </Link>

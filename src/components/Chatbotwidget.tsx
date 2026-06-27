@@ -11,6 +11,7 @@ import {
   Leaf,
   RotateCcw,
 } from "lucide-react";
+import Image from "next/image";
 
 // ─── Tipe Data ──────────────────────────────────────────────────────────────
 
@@ -35,8 +36,8 @@ function ChatBubble({ message }: { message: Message }) {
     <div className={`flex items-end gap-2 ${isUser ? "flex-row-reverse" : "flex-row"}`}>
       {/* Avatar AI */}
       {!isUser && (
-        <div className="w-7 h-7 rounded-full bg-green-100 flex-shrink-0 flex items-center justify-center">
-          <Leaf className="w-3.5 h-3.5 text-green-700" />
+        <div className="w-7 h-7 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
+          <Image src="/limbacaicon.png" alt="Limbara AI" width={14} height={14} />
         </div>
       )}
 
@@ -139,8 +140,8 @@ export default function ChatbotWidget() {
             {/* Header */}
             <div className="bg-green-800 px-5 py-4 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                  <Leaf className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <Image src="/limbacaicon.png" alt="Limbara AI" width={16} height={16} />
                 </div>
                 <div>
                   <p className="text-white font-black text-sm">Limbara AI</p>

@@ -331,7 +331,7 @@ export default function ResultModal({
                               {/* Alat */}
                               <div className="mt-6">
                                 <h6 className="font-bold text-gray-900 mb-2">
-                                  🧰 Alat yang diperlukan
+                                  Alat yang diperlukan
                                 </h6>
 
                                 <div className="flex flex-wrap gap-2">
@@ -349,7 +349,7 @@ export default function ResultModal({
                               {/* Bahan */}
                               <div className="mt-5">
                                 <h6 className="font-bold text-gray-900 mb-2">
-                                  📦 Bahan
+                                  Bahan
                                 </h6>
 
                                 <div className="flex flex-wrap gap-2">
@@ -367,7 +367,7 @@ export default function ResultModal({
                               {/* Persiapan */}
                               <div className="mt-5">
                                 <h6 className="font-bold text-gray-900 mb-2">
-                                  ✅ Persiapan
+                                  Persiapan
                                 </h6>
 
                                 <ul className="space-y-2">

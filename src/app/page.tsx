@@ -12,9 +12,9 @@ import RebornSection from "@/components/home/RebornSection";
 import RecyclableSection from "@/components/home/RecyclableSection";
 import AIFlowSection from "@/components/home/AIFlowSection";
 import CTASection from "@/components/home/CTASection";
+import ChatbotWidget from "@/components/Chatbotwidget";
 
 import { SCROLL_THRESHOLDS } from "@/constants/HomeData";
-import ChatbotWidget from "@/components/ Chatbotwidget";
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);

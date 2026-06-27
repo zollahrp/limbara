@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { createClient } from "@/utils/supabase/client";
 import { sendMessageToAI } from "@/app/service/chatAI";
 import {
   MessageCircle,
@@ -57,7 +56,6 @@ function ChatBubble({ message }: { message: Message }) {
 // ─── Komponen Utama ─────────────────────────────────────────────────────────
 
 export default function ChatbotWidget() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [input, setInput] = useState("");
@@ -65,30 +63,6 @@ export default function ChatbotWidget() {
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  // ── Auth check ──────────────────────────────────────────────────
-  useEffect(() => {
-    const supabase = createClient();
-
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsLoggedIn(!!session?.user);
-    };
-
-    checkSession();
-
-    // Dengarkan perubahan auth (login/logout)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(!!session?.user);
-      // Reset chat saat logout
-      if (!session?.user) {
-        setIsOpen(false);
-        setMessages([GREETING]);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   // ── Auto-scroll ke pesan terbaru ────────────────────────────────
   useEffect(() => {
@@ -147,9 +121,6 @@ export default function ChatbotWidget() {
     setMessages([GREETING]);
     setInput("");
   };
-
-  // Sembunyikan widget jika belum login
-  if (!isLoggedIn) return null;
 
   return (
     <>

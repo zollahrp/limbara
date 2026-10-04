@@ -10,8 +10,8 @@ export default function BankSampahHeader() {
         <span className="text-green-700">Terdekat</span>
       </h1>
       <p className="mt-4 text-black/60 max-w-md leading-relaxed">
-        Temukan lokasi bank sampah dan pusat daur ulang di sekitar kamu. Data bersumber
-        dari jaringan komunitas lokal.
+        Temukan lokasi bank sampah terdekat dari posisimu. Data bersumber dari
+        dari data fasilitas BSU Kementerian Lingkungan Hidup dan Kehutanan 2025.
       </p>
     </header>
   );

@@ -5,21 +5,16 @@ import { useRouter } from "next/navigation";
 import { History } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HistoryList from "@/components/HistoryList";
-import { createClient } from "@/utils/supabase/client";
+import { getCurrentUser } from "@/app/service/api";
 
 export default function RiwayatPage() {
   const router = useRouter();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-
     const checkAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session?.user) {
+      const user = await getCurrentUser();
+      if (!user) {
         router.replace("/login");
         return;
       }

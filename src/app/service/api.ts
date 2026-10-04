@@ -1,188 +1,114 @@
-// service/api.ts
 import Axios from "axios";
-import { ScanResponse, InsightResponse } from "@/types/scan";
+import { InsightResponse, ScanHistoryItem, ScanHistoryPage, ScanResponse, WasteInsightData } from "@/types/scan";
+import { FasilitasNearbyParams, FasilitasNearbyResponse } from "@/types/BankSampah";
 
-// Gunakan environment variable jika ada, fallback ke localhost
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
+const api = Axios.create({ baseURL: `${BASE_URL}/api`, withCredentials: true });
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  avatar_url: string | null;
+}
+
+export interface CreateScanHistoryPayload {
+  image_url: string;
+  detected_objects: string[];
+  danger_level: WasteInsightData["tingkat_bahaya"];
+  is_recyclable: boolean;
+  insight_summary: string;
+  full_insight_data: WasteInsightData;
+}
+
+export function loginWithGoogle() {
+  const returnTo = encodeURIComponent(window.location.origin);
+  window.location.assign(`${BASE_URL}/api/auth/google/login?return_to=${returnTo}`);
+}
+
+export async function getCurrentUser(): Promise<AuthUser | null> {
+  try {
+    const response = await api.get<AuthUser>("/auth/me");
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
+export async function logout() {
+  await api.post("/auth/logout");
+}
 
 export async function ScanImage(image: File): Promise<ScanResponse> {
   try {
     const formData = new FormData();
-    // 'file' harus sesuai dengan nama parameter di FastAPI: async def process_image_and_detect(file: UploadFile)
     formData.append("file", image);
-
-    // Pastikan ada garis miring '/' sebelum path endpoint
-    const response = await Axios.post<ScanResponse>(`${BASE_URL}/api/scan`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
+    const response = await api.post<ScanResponse>("/scan", formData);
     const data = response.data;
 
-    // 1. JIKA BERHASIL MENDETEKSI OBJEK (YOLO / Gemini)
-    if (data.status === "success" && "allDetections" in data && data.allDetections.length > 0) {
-      // Deduplikasi: hanya simpan detection dengan confidence tertinggi per className
-      const deduplicatedDetections = Array.from(
+    if (data.status === "success" && data.allDetections.length > 0) {
+      const detections = Array.from(
         data.allDetections.reduce((map, detection) => {
           const existing = map.get(detection.className);
-          if (!existing || detection.confidence > existing.confidence) {
-            map.set(detection.className, detection);
-          }
+          if (!existing || detection.confidence > existing.confidence) map.set(detection.className, detection);
           return map;
-        }, new Map()).values()
-      );
-
-      // Urutkan dari confidence paling tinggi ke rendah
-      const sortedDetections = deduplicatedDetections.sort(
-        (a, b) => b.confidence - a.confidence
-      );
-
-      const uniqueClassNames = Array.from(new Set(sortedDetections.map(d => d.className)));
+        }, new Map<string, (typeof data.allDetections)[number]>()).values(),
+      ).sort((a, b) => b.confidence - a.confidence);
 
       return {
-        status: "success",
-        message: data.message,
-        image_url: data.image_url,
-        totalDetected: uniqueClassNames.length,
-        detected_class_names: uniqueClassNames,
-        allDetections: sortedDetections,
+        ...data,
+        totalDetected: new Set(detections.map((detection) => detection.className)).size,
+        detected_class_names: Array.from(new Set(detections.map((detection) => detection.className))),
+        allDetections: detections,
       };
     }
 
-    // 2. JIKA API MERESPONS 'NOT FOUND'
-    if (data.status === "not_found" || ("allDetections" in data && data.allDetections?.length === 0)) {
-      return {
-        status: "not_found",
-        message: data.message || "Tidak ada sampah yang terdeteksi pada gambar.",
-      };
-    }
-
-    // 3. JIKA API MERESPONS 'ERROR' (Misal: YOLO gagal dimuat / Gemini Overload)
-    if (data.status === "error") {
-      return {
-        status: "error",
-        message: data.message || "Terjadi kesalahan sistem di server.",
-      };
-    }
-
-    throw new Error("Respons tidak valid dari server.");
-  } catch (error: any) {
-    console.error("Error detecting waste:", error);
-    
-    // Alih-alih throw error yang bisa membuat aplikasi Next.js crash (Red Screen),
-    // kita kembalikan status "error" agar komponen UI bisa menampilkannya dengan elegan.
-    return {
-      status: "error",
-      message: error?.response?.data?.message || "Gagal terhubung ke server. Pastikan backend FastAPI sedang berjalan.",
-    };
+    if (data.status === "not_found") return data;
+    return { status: "error", message: data.message || "Terjadi kesalahan sistem di server." };
+  } catch (error: unknown) {
+    const message = Axios.isAxiosError(error) ? error.response?.data?.detail : undefined;
+    return { status: "error", message: message || "Gagal terhubung ke server." };
   }
 }
 
 export async function GetWasteInsight(detectedClasses: string[]): Promise<InsightResponse> {
   try {
-    const payload = {
-      detected_classes: detectedClasses,
-    };
-
-    const response = await Axios.post<InsightResponse>(`${BASE_URL}/api/insight`, payload, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = response.data;
-
-    // Jika backend berhasil memberikan insight
-    if (data.status === "success" && data.data) {
-      return {
-        status: "success",
-        data: data.data,
-      };
-    }
-
-    // Jika terjadi error dari blok except di Python
-    if (data.status === "error") {
-      return {
-        status: "error",
-        message: data.message || "Gagal mendapatkan insight dari AI.",
-        data: null,
-      };
-    }
-
-    throw new Error("Format respons insight tidak dikenali.");
-  } catch (error: any) {
-    console.error("Error fetching insight:", error);
-    
-    return {
-      status: "error",
-      message: error?.response?.data?.message || "Koneksi ke server gagal saat mengambil insight edukasi.",
-      data: null,
-    };
+    const response = await api.post<InsightResponse>("/insight", { detected_classes: detectedClasses });
+    return response.data;
+  } catch (error: unknown) {
+    const message = Axios.isAxiosError(error) ? error.response?.data?.detail : undefined;
+    return { status: "error", message: message || "Gagal mengambil insight edukasi.", data: null };
   }
 }
 
-// ─── Tambahan untuk app/service/api.ts ────────────────────────────────────────
-// Sisipkan import & fungsi berikut ke dalam file api.ts yang sudah ada.
-
-import { createClient } from "@/utils/supabase/client";
-import { ScanHistoryItem, ScanHistoryPage } from "@/types/scan";
-
-
-export async function getScanHistories(
-  page: number = 1,
-  pageSize: number = 9
-): Promise<ScanHistoryPage> {
-  const supabase = createClient();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session?.user) {
-    return { data: [], total: 0, page, pageSize, totalPages: 0 };
-  }
-
-  const from = (page - 1) * pageSize;
-  const to = from + pageSize - 1;
-
-  const { data, error, count } = await supabase
-    .from("scan_histories")
-    .select("*", { count: "exact" })
-    .eq("user_id", session.user.id)
-    .order("created_at", { ascending: false })
-    .range(from, to);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const total = count ?? 0;
-
-  return {
-    data: (data ?? []) as ScanHistoryItem[],
-    total,
-    page,
-    pageSize,
-    totalPages: Math.max(1, Math.ceil(total / pageSize)),
-  };
+export async function saveScanHistory(payload: CreateScanHistoryPayload): Promise<ScanHistoryItem> {
+  const response = await api.post<ScanHistoryItem>("/histories", payload);
+  return response.data;
 }
 
-/**
- * Mengambil satu riwayat scan berdasarkan ID (opsional, untuk deep-link).
- */
+export async function getScanHistories(page = 1, pageSize = 9): Promise<ScanHistoryPage> {
+  const response = await api.get<ScanHistoryPage>("/histories", { params: { page, page_size: pageSize } });
+  return response.data;
+}
+
 export async function getScanHistoryById(id: string): Promise<ScanHistoryItem | null> {
-  const supabase = createClient();
-
-  const { data, error } = await supabase
-    .from("scan_histories")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
+  try {
+    const response = await api.get<ScanHistoryItem>(`/histories/${id}`);
+    return response.data;
+  } catch {
     return null;
   }
+}
 
-  return data as ScanHistoryItem;
+export async function sendChatMessage(message: string): Promise<string> {
+  const response = await api.post<{ reply: string }>("/chat", { message });
+  return response.data.reply;
+}
+
+export async function getNearbyFasilitas({ lat, lng, radiusKm, limit }: FasilitasNearbyParams): Promise<FasilitasNearbyResponse> {
+  const response = await api.get<FasilitasNearbyResponse>("/fasilitas/nearby", {
+    params: { lat, lng, radius_km: radiusKm, limit },
+  });
+  return response.data;
 }

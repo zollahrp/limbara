@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
+import Axios from "axios";
 import Navbar from "@/components/Navbar";
-import { bankSampahList } from "@/constants/BankSampahData";
+import { getNearbyFasilitas } from "@/app/service/api";
+import { Fasilitas } from "@/types/BankSampah";
 
 import BankSampahHeader from "@/components/bank-sampah/BankSampahHeader";
 import BankSampahControls from "@/components/bank-sampah/BankSampahControls";
 import BankSampahList from "@/components/bank-sampah/BankSampahList";
-import { UI_BankSampah } from "@/types/BankSampah";
 import EmptyState from "@/components/bank-sampah/EmptyState";
 
 const MapView = dynamic(() => import("@/components/BankSampahMap"), {
@@ -25,57 +26,59 @@ const MapView = dynamic(() => import("@/components/BankSampahMap"), {
 
 type Status = "idle" | "requesting" | "loading" | "success" | "error" | "denied" | "not_found";
 
-const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-  const R = 6371; 
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-};
+const RESULT_LIMIT = 100;
+const AVAILABLE_RADII = [3, 5, 10, 25, 50];
+
+function getErrorMessage(error: unknown): string {
+  if (Axios.isAxiosError(error)) {
+    const detail = error.response?.data?.detail;
+    if (typeof detail === "string") return detail;
+  }
+  return "Gagal mengambil data bank sampah dari server.";
+}
 
 export default function BankSampahPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [results, setResults] = useState<UI_BankSampah[]>([]);
+  const [results, setResults] = useState<Fasilitas[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [radius, setRadius] = useState<number>(5);
-  
+
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const latestRequestId = useRef<number>(0);
 
-  const fetchNearbyLocal = useCallback((lat: number, lng: number, r: number) => {
+  const fetchNearby = useCallback(async (lat: number, lng: number, searchRadius: number) => {
+    const requestId = latestRequestId.current + 1;
+    latestRequestId.current = requestId;
+
     setStatus("loading");
-    
-    setTimeout(() => {
-      const filtered = bankSampahList
-        .filter((bank) => {
-          const dist = getDistance(lat, lng, bank.latitude, bank.longitude);
-          return dist <= r;
-        })
-        .map((bank) => ({
-          id: bank.id,
-          name: bank.nama,
-          address: bank.alamat,
-          category: "Pusat Daur Ulang",
-          // PEMBARUAN DI SINI: Gunakan lat dan lng agar peta Leaflet tidak error
-          lat: bank.latitude,
-          lng: bank.longitude,
-          phone: "Belum tersedia",
-          opening_hours: "08:00 - 15:00",
-          google_maps_url: `https://www.google.com/maps/search/?api=1&query=${bank.latitude},${bank.longitude}`
-        }));
+    setErrorMsg("");
 
-      if (filtered.length === 0) {
+    try {
+      const response = await getNearbyFasilitas({ lat, lng, radiusKm: searchRadius, limit: RESULT_LIMIT });
+      if (requestId !== latestRequestId.current) return;
+
+      setTotalCount(response.total);
+      if (response.count === 0) {
+        setResults([]);
+        setSelectedId(null);
         setStatus("not_found");
-      } else {
-        setResults(filtered);
-        setSelectedId(filtered[0].id);
-        setStatus("success");
+        return;
       }
-    }, 600);
+
+      setResults(response.data);
+      setSelectedId(response.data[0].id);
+      setStatus("success");
+    } catch (error) {
+      if (requestId !== latestRequestId.current) return;
+      setResults([]);
+      setTotalCount(0);
+      setSelectedId(null);
+      setErrorMsg(getErrorMessage(error));
+      setStatus("error");
+    }
   }, []);
 
   const requestLocation = useCallback(() => {
@@ -90,7 +93,7 @@ export default function BankSampahPage() {
       (position) => {
         const { latitude, longitude } = position.coords;
         setUserLocation({ lat: latitude, lng: longitude });
-        fetchNearbyLocal(latitude, longitude, radius);
+        fetchNearby(latitude, longitude, radius);
       },
       (err) => {
         if (err.code === err.PERMISSION_DENIED) {
@@ -102,7 +105,7 @@ export default function BankSampahPage() {
       },
       { timeout: 10000, maximumAge: 60000 }
     );
-  }, [radius, fetchNearbyLocal]);
+  }, [radius, fetchNearby]);
 
   useEffect(() => {
     if (selectedId !== null && cardRefs.current[selectedId]) {
@@ -116,20 +119,23 @@ export default function BankSampahPage() {
   const handleRadiusChange = (newRadius: number) => {
     setRadius(newRadius);
     if (userLocation) {
-      fetchNearbyLocal(userLocation.lat, userLocation.lng, newRadius);
+      fetchNearby(userLocation.lat, userLocation.lng, newRadius);
     }
   };
+
+  const nextRadius = AVAILABLE_RADII.find((value) => value > radius) ?? radius;
 
   return (
     <div className="min-h-screen bg-[#F7F8F4] font-sans">
       <Navbar />
       <BankSampahHeader />
-      <BankSampahControls 
-        radius={radius} 
-        onRadiusChange={handleRadiusChange} 
-        onRequestLocation={requestLocation} 
-        status={status} 
-        resultCount={results.length} 
+      <BankSampahControls
+        radius={radius}
+        onRadiusChange={handleRadiusChange}
+        onRequestLocation={requestLocation}
+        status={status}
+        resultCount={results.length}
+        totalCount={totalCount}
       />
 
       {status === "idle" && (
@@ -139,7 +145,7 @@ export default function BankSampahPage() {
         <EmptyState icon="🔒" title="Akses Lokasi Ditolak" desc="Izinkan akses lokasi di pengaturan browser kamu, lalu klik tombol cari kembali." isError />
       )}
       {status === "not_found" && (
-        <EmptyState icon="🗂️" title={`Tidak Ditemukan dalam ${radius} km`} desc="Coba perluas radius pencarian menjadi 10 km." />
+        <EmptyState icon="🗂️" title={`Tidak Ditemukan dalam ${radius} km`} desc={`Data bank sampah terdekat di radii ini belum tersedia. Coba perluas radius pencarian menjadi ${nextRadius} km.`} />
       )}
       {status === "error" && (
         <EmptyState icon="⚠️" title="Terjadi Kesalahan" desc={errorMsg} isError />
@@ -148,20 +154,20 @@ export default function BankSampahPage() {
       {status === "success" && results.length > 0 && (
         <main className="px-6 sm:px-10 lg:px-16 max-w-screen-xl mx-auto pb-16">
           <div className="flex flex-col lg:flex-row gap-8" style={{ height: "620px" }}>
-            <BankSampahList 
-              results={results} 
-              selectedId={selectedId} 
-              onSelect={setSelectedId} 
-              cardRefs={cardRefs} 
+            <BankSampahList
+              results={results}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              cardRefs={cardRefs}
             />
-            
+
             <div className="flex-1 min-h-[400px] lg:min-h-0 border border-black/10 rounded-2xl overflow-hidden shadow-sm bg-white">
               {userLocation && (
                 <MapView
-                  banks={results} 
+                  banks={results}
                   userLocation={userLocation}
-                  selectedId={selectedId} 
-                  onSelect={(id) => setSelectedId(id)} 
+                  selectedId={selectedId}
+                  onSelect={setSelectedId}
                 />
               )}
             </div>

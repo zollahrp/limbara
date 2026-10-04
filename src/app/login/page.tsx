@@ -1,75 +1,11 @@
 'use client';
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/client";
-import Swal from "sweetalert2";
+import { loginWithGoogle } from "@/app/service/api";
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-
-  const supabase = createClient();
-
-  // --- 1. HANDLING GOOGLE AUTH ---
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`, 
-      },
-    });
-
-    if (error) {
-      console.error("Gagal login dengan Google:", error.message);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: "Terjadi kesalahan saat mencoba login dengan Google.",
-        confirmButtonColor: "#ef4444"
-      });
-    }
-  };
-
-  // --- 2. HANDLING MAGIC LINK (PASSWORDLESS) ---
-  const handleMagicLink = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-
-      if (error) throw error;
-
-      // Popup Sukses Kirim Email
-      Swal.fire({
-        icon: "success",
-        title: "Tautan Terkirim!",
-        text: "Silakan cek kotak masuk (atau folder spam) email kamu untuk tautan masuk otomatis.",
-        confirmButtonColor: "#14532d", 
-        customClass: { popup: "rounded-3xl", confirmButton: "rounded-xl px-6 py-2" }
-      });
-
-      setEmail(""); // Kosongkan input setelah berhasil terkirim
-
-    } catch (error: any) {
-      Swal.fire({
-        icon: "error",
-        title: "Gagal Mengirim Tautan",
-        text: error.message || "Pastikan email yang kamu masukkan valid.",
-        confirmButtonColor: "#ef4444",
-        customClass: { popup: "rounded-3xl", confirmButton: "rounded-xl px-6 py-2" }
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleGoogleLogin = () => loginWithGoogle();
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#f7f4ee] p-4 sm:p-8">
@@ -92,7 +28,7 @@ export default function LoginPage() {
               Selamat Datang
             </h1>
             <p className="text-gray-500 font-medium text-sm sm:text-base">
-              Masuk dengan mudah tanpa perlu menghafal kata sandi. Cukup gunakan Google atau alamat emailmu.
+              Masuk dengan aman menggunakan akun Google kamu.
             </p>
           </div>
 
@@ -107,39 +43,6 @@ export default function LoginPage() {
             <span className="tracking-wide">Lanjutkan dengan Google</span>
           </button>
 
-          {/* Garis Pemisah (Divider) */}
-          <div className="relative flex items-center py-6">
-            <div className="flex-grow border-t border-gray-100"></div>
-            <span className="flex-shrink-0 mx-4 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Atau tautan ajaib</span>
-            <div className="flex-grow border-t border-gray-100"></div>
-          </div>
-
-          {/* Form Magic Link */}
-          <form onSubmit={handleMagicLink} className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2 ml-1">
-                Alamat Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="nama@email.com"
-                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:outline-none focus:ring-4 focus:ring-green-900/10 focus:border-green-800 transition-all font-medium text-gray-800 placeholder:text-gray-400"
-              />
-            </div>
-            
-            <button 
-              type="submit" 
-              disabled={isLoading || !email}
-              className="w-full bg-green-900 text-white font-bold uppercase tracking-[0.2em] text-sm py-5 rounded-2xl hover:bg-green-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 mt-4 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Mengirim Tautan..." : "Kirim Tautan Masuk"}
-            </button>
-          </form>
-
-          {/* Catatan Kecil */}
           <p className="mt-8 text-center text-xs text-gray-400 font-medium leading-relaxed px-4">
             Dengan melanjutkan, kamu menyetujui Ketentuan Layanan dan Kebijakan Privasi Limbara.
           </p>
@@ -161,7 +64,7 @@ export default function LoginPage() {
               <span className="text-green-400">Cepat & Aman.</span>
             </h2>
             <p className="text-green-100/70 text-sm leading-relaxed font-medium">
-              Sistem kami menggunakan tautan sekali pakai (*magic link*) langsung ke emailmu untuk keamanan tingkat tinggi tanpa perlu mengingat kata sandi.
+              Sistem kami menggunakan autentikasi Google dan sesi aman yang dikelola oleh server Limbara.
             </p>
           </div>
         </div>

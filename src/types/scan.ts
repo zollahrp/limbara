@@ -63,8 +63,6 @@ export interface InsightResponse {
 // Union type untuk memfasilitasi semua kemungkinan respons
 export type ScanResponse = ScanSuccessResponse | ScanErrorResponse;
 
-// ─── Riwayat Scan (Supabase: table scan_histories) ────────────────────────────
-
 export interface ScanHistoryItem {
   id: string;
   user_id: string;

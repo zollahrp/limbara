@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { ScanSuccessResponse, WasteInsightData } from "@/types/scan";
-import { createClient } from "@/utils/supabase/client";
+import { AuthUser, getCurrentUser, saveScanHistory } from "@/app/service/api";
 import Swal from "sweetalert2";
 import { toPng } from "html-to-image";
 
@@ -33,23 +33,16 @@ export default function ResultModal({
   insightData,
   isLoadingInsight,
 }: ResultModalProps) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
 
-  const supabase = createClient();
   const modalContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      const checkUser = async () => {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        setUser(session?.user ?? null);
-      };
-      checkUser();
+      getCurrentUser().then(setUser);
     }
   }, [isOpen]);
 
@@ -76,19 +69,14 @@ export default function ResultModal({
 
     setIsSaving(true);
     try {
-      const { error } = await supabase.from("scan_histories").insert([
-        {
-          user_id: user.id,
-          image_url: scanData.image_url,
-          detected_objects: scanData.detected_class_names,
-          danger_level: insightData.tingkat_bahaya,
-          is_recyclable: insightData.dapat_didaur_ulang,
-          insight_summary: insightData.ringkasan_bahaya,
-          full_insight_data: insightData,
-        },
-      ]);
-
-      if (error) throw error;
+      await saveScanHistory({
+        image_url: scanData.image_url,
+        detected_objects: scanData.detected_class_names,
+        danger_level: insightData.tingkat_bahaya,
+        is_recyclable: insightData.dapat_didaur_ulang,
+        insight_summary: insightData.ringkasan_bahaya,
+        full_insight_data: insightData,
+      });
 
       Swal.fire({
         icon: "success",

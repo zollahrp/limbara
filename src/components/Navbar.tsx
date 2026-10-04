@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { createClient } from "@/utils/supabase/client";
+import { AuthUser, getCurrentUser, logout } from "@/app/service/api";
 import { User as UserIcon, LogOut } from "lucide-react";
 import Swal from "sweetalert2";
 
@@ -12,10 +12,8 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // State untuk Supabase Auth
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const supabase = createClient();
 
   // 1. Deteksi Scroll (Bawaan dari desain barumu)
   useEffect(() => {
@@ -34,23 +32,9 @@ export default function Navbar() {
     };
   }, []);
 
-  // 2. Deteksi Sesi Login Supabase
   useEffect(() => {
-    const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-    };
-
-    fetchSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [supabase.auth]);
+    getCurrentUser().then(setUser);
+  }, []);
 
   // 3. Fungsi Logout dengan SweetAlert Konfirmasi & Toast
   const handleLogout = () => {
@@ -69,7 +53,8 @@ export default function Navbar() {
       customClass: { popup: "rounded-3xl", confirmButton: "rounded-xl px-6 py-2", cancelButton: "rounded-xl px-6 py-2" }
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await supabase.auth.signOut();
+        await logout();
+        setUser(null);
         
         const Toast = Swal.mixin({
           toast: true,
@@ -95,8 +80,8 @@ export default function Navbar() {
   ];
 
   // Ekstrak data metadata Google/Email
-  const userName = user?.user_metadata?.full_name || "Pengguna";
-  const userAvatar = user?.user_metadata?.avatar_url || "";
+  const userName = user?.name || "Pengguna";
+  const userAvatar = user?.avatar_url || "";
 
   return (
     <motion.nav

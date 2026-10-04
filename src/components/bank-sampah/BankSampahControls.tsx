@@ -1,15 +1,17 @@
 import { BankSampahControlsProps } from "@/types/BankSampah";
 
-export default function BankSampahControls({ radius, onRadiusChange, onRequestLocation, status, resultCount }: BankSampahControlsProps) {
+export default function BankSampahControls({ radius, onRadiusChange, onRequestLocation, status, resultCount, totalCount }: BankSampahControlsProps) {
+  const isSearching = status === "requesting" || status === "loading";
+  const isTruncated = status === "success" && totalCount > resultCount;
+
   return (
     <section className="px-6 sm:px-10 lg:px-16 max-w-screen-xl mx-auto mb-8">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        {/* Radius Selector */}
         <div className="flex items-center gap-3 bg-white border border-black/10 px-4 py-3 shadow-sm rounded-xl">
           <span className="text-xs text-black/50 uppercase tracking-widest font-bold">
             Radius
           </span>
-          {[3, 5, 10].map((r) => (
+          {[3, 5, 10, 25, 50].map((r) => (
             <button
               key={r}
               onClick={() => onRadiusChange(r)}
@@ -24,13 +26,12 @@ export default function BankSampahControls({ radius, onRadiusChange, onRequestLo
           ))}
         </div>
 
-        {/* Action Button */}
         <button
           onClick={onRequestLocation}
-          disabled={status === "requesting" || status === "loading"}
+          disabled={isSearching}
           className="flex items-center gap-3 bg-green-800 hover:bg-green-700 disabled:bg-green-900/50 text-white px-8 py-3.5 text-xs font-bold uppercase tracking-[0.25em] rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:translate-y-0"
         >
-          {status === "requesting" || status === "loading" ? (
+          {isSearching ? (
             <>
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               {status === "requesting" ? "Meminta Lokasi..." : "Mencari..."}
@@ -49,6 +50,7 @@ export default function BankSampahControls({ radius, onRadiusChange, onRequestLo
         {status === "success" && (
           <p className="text-xs text-black/50 tracking-wide font-medium">
             Ditemukan <span className="text-green-700 font-bold">{resultCount} lokasi</span> dalam radius {radius} km
+            {isTruncated && <span className="text-black/40"> dari total {totalCount} lokasi</span>}
           </p>
         )}
       </div>

@@ -44,8 +44,6 @@ npm install
 
 ### 3. Pengaturan Environment Variables (.env)
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 NEXT_PUBLIC_API_BASE_URL=https://limbara.rivalfitrah.my.id
 ```
 

@@ -238,7 +238,7 @@ export default function ResultModal({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-4xl bg-[#F7F8F4] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+          className="relative w-full max-w-4xl bg-[#F7F8F4] text-gray-900 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         >
           {/* Header */}
           <div className="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
@@ -247,7 +247,7 @@ export default function ResultModal({
             </h3>
             <button
               onClick={onClose}
-              className="p-2 bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 rounded-full transition-colors"
+              className="p-2 bg-gray-100 hover:bg-red-100 text-gray-700 hover:text-red-600 rounded-full transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -256,7 +256,7 @@ export default function ResultModal({
           {/* Area Konten Scrollable */}
           <div
             ref={modalContentRef}
-            className="flex flex-col lg:flex-row overflow-y-auto p-6 gap-6 bg-[#F7F8F4]"
+            className="flex flex-col lg:flex-row overflow-y-auto p-6 gap-6 bg-[#F7F8F4] text-gray-900"
           >
             {/* KIRI: Gambar Asli, Daftar Deteksi, & Tahukah Kamu */}
             <div className="w-full lg:w-1/2 space-y-4">
@@ -272,7 +272,7 @@ export default function ResultModal({
 
               {/* Daftar Objek Terdeteksi */}
               <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                <p className="text-xs font-bold text-gray-700 uppercase tracking-widest mb-3">
                   Objek Terdeteksi
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -296,11 +296,11 @@ export default function ResultModal({
 
               {/* POSISI BARU: Fakta Menarik (Tahukah Kamu?) */}
               {insightData && !isLoadingInsight && (
-                <div className="bg-amber-50 p-5 rounded-2xl border border-amber-100 shadow-sm mt-6">
-                  <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                <div className="bg-amber-50 p-5 rounded-2xl border border-amber-200 shadow-sm mt-6">
+                  <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-2 flex items-center gap-1.5">
                     💡 Tahukah Kamu?
                   </p>
-                  <p className="text-sm text-amber-900/80 italic font-medium leading-relaxed">
+                  <p className="text-sm text-gray-900 font-medium leading-relaxed">
                     {insightData.fakta_menarik}
                   </p>
                 </div>
@@ -310,7 +310,7 @@ export default function ResultModal({
             {/* KANAN: Insight Edukasi (Fokus pada Panduan) */}
             <div className="w-full lg:w-1/2 flex flex-col">
               {isLoadingInsight ? (
-                <div className="flex-1 flex flex-col items-center justify-center py-12 text-gray-400">
+                <div className="flex-1 flex flex-col items-center justify-center py-12 text-gray-500">
                   <div className="w-10 h-10 border-4 border-green-200 border-t-green-600 rounded-full animate-spin mb-4" />
                   <p className="font-medium animate-pulse text-sm">
                     Menyusun insight edukasi...
@@ -321,13 +321,13 @@ export default function ResultModal({
                   {/* Badge Status */}
                   <div className="flex gap-2">
                     <div
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${insightData.tingkat_bahaya === "tinggi" ? "bg-red-100 text-red-700" : insightData.tingkat_bahaya === "sedang" ? "bg-amber-100 text-amber-700" : "bg-blue-100 text-blue-700"}`}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${insightData.tingkat_bahaya === "tinggi" ? "bg-red-100 text-red-700" : insightData.tingkat_bahaya === "sedang" ? "bg-amber-100 text-amber-800" : "bg-blue-100 text-blue-800"}`}
                     >
                       <AlertTriangle className="w-3.5 h-3.5" /> Bahaya:{" "}
                       {insightData.tingkat_bahaya}
                     </div>
                     <div
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${insightData.dapat_didaur_ulang ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"}`}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${insightData.dapat_didaur_ulang ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-800"}`}
                     >
                       <Recycle className="w-3.5 h-3.5" />{" "}
                       {insightData.dapat_didaur_ulang
@@ -342,7 +342,7 @@ export default function ResultModal({
                       <Info className="w-4 h-4 text-blue-500" /> Dampak
                       Lingkungan
                     </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm text-gray-900 leading-relaxed font-normal">
                       {insightData.ringkasan_bahaya}
                     </p>
                   </div>
@@ -358,7 +358,6 @@ export default function ResultModal({
                     </p>
                   </div>
 
-                  {/* Ide Praktis Daur Ulang */}
                   {/* Ide Praktis Daur Ulang */}
                   {insightData.dapat_didaur_ulang &&
                     insightData.ide_daur_ulang.length > 0 && (
@@ -379,7 +378,7 @@ export default function ResultModal({
                                 {ide.judul_ide}
                               </h5>
 
-                              <p className="text-sm text-gray-600 mt-2">
+                              <p className="text-sm text-gray-900 mt-2 font-normal leading-relaxed">
                                 {ide.deskripsi}
                               </p>
 
@@ -403,7 +402,7 @@ export default function ResultModal({
                                   {ide.alat_yang_diperlukan.map((alat, i) => (
                                     <span
                                       key={i}
-                                      className="bg-white border px-3 py-1 rounded-lg text-sm"
+                                      className="bg-white border border-gray-300 px-3 py-1 rounded-lg text-sm font-medium text-gray-900 shadow-xs"
                                     >
                                       {alat}
                                     </span>
@@ -421,7 +420,7 @@ export default function ResultModal({
                                   {ide.bahan_bahan.map((item, i) => (
                                     <span
                                       key={i}
-                                      className="bg-white border px-3 py-1 rounded-lg text-sm"
+                                      className="bg-white border border-gray-300 px-3 py-1 rounded-lg text-sm font-medium text-gray-900 shadow-xs"
                                     >
                                       {item}
                                     </span>
@@ -437,8 +436,8 @@ export default function ResultModal({
 
                                 <ul className="space-y-2">
                                   {ide.persiapan.map((item, i) => (
-                                    <li key={i} className="flex gap-2 text-sm">
-                                      <span>•</span>
+                                    <li key={i} className="flex gap-2 text-sm text-gray-900">
+                                      <span className="text-gray-900 font-bold">•</span>
                                       <span>{item}</span>
                                     </li>
                                   ))}
@@ -461,24 +460,24 @@ export default function ResultModal({
                                         Langkah {step.langkah} • {step.judul}
                                       </h6>
 
-                                      <p className="text-sm text-gray-600 mt-2">
-                                        <strong>Tujuan:</strong> {step.tujuan}
+                                      <p className="text-sm text-gray-900 mt-2">
+                                        <strong className="font-bold text-gray-900">Tujuan:</strong> {step.tujuan}
                                       </p>
 
                                       <ul className="mt-3 space-y-2">
                                         {step.instruksi.map((ins, i) => (
                                           <li
                                             key={i}
-                                            className="flex gap-2 text-sm text-gray-600"
+                                            className="flex gap-2 text-sm text-gray-900"
                                           >
-                                            <span>{i + 1}.</span>
+                                            <span className="font-medium text-gray-900">{i + 1}.</span>
                                             <span>{ins}</span>
                                           </li>
                                         ))}
                                       </ul>
 
-                                      <div className="mt-4 bg-green-50 border border-green-100 rounded-lg p-3 text-sm">
-                                        💡 <strong>Tips:</strong> {step.tips}
+                                      <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-gray-900">
+                                        💡 <strong className="font-bold text-gray-900">Tips:</strong> {step.tips}
                                       </div>
                                     </div>
                                   ))}
@@ -493,8 +492,8 @@ export default function ResultModal({
 
                                 <ul className="space-y-2">
                                   {ide.tips.map((tip, i) => (
-                                    <li key={i} className="flex gap-2 text-sm">
-                                      <span>✔</span>
+                                    <li key={i} className="flex gap-2 text-sm text-gray-900">
+                                      <span className="text-green-700 font-bold">✔</span>
                                       <span>{tip}</span>
                                     </li>
                                   ))}
@@ -502,12 +501,12 @@ export default function ResultModal({
                               </div>
 
                               {/* Hasil */}
-                              <div className="mt-6 bg-green-100 rounded-xl p-4">
-                                <h6 className="font-bold text-green-800 mb-2">
+                              <div className="mt-6 bg-green-100 rounded-xl p-4 border border-green-200">
+                                <h6 className="font-bold text-green-900 mb-2">
                                   Hasil Akhir
                                 </h6>
 
-                                <p className="text-sm text-green-900">
+                                <p className="text-sm font-medium text-green-950">
                                   {ide.hasil_akhir}
                                 </p>
                               </div>
@@ -536,7 +535,7 @@ export default function ResultModal({
               <button
                 onClick={handleDownloadImage}
                 disabled={isDownloading}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 text-sm font-bold rounded-xl transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-300 text-gray-900 text-sm font-bold rounded-xl transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isDownloading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

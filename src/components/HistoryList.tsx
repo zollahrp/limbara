@@ -158,8 +158,8 @@ export default function HistoryList({ pageSize = 9 }: HistoryListProps) {
 
             {/* Konten */}
             <div className="p-4">
-              <p className="text-[11px] text-gray-400 flex items-center gap-1.5 mb-2">
-                <Clock className="w-3 h-3" />
+              <p className="text-[11px] text-gray-600 flex items-center gap-1.5 mb-2 font-medium">
+                <Clock className="w-3 h-3 text-gray-500" />
                 {formatDate(item.created_at)}
               </p>
 
@@ -167,23 +167,23 @@ export default function HistoryList({ pageSize = 9 }: HistoryListProps) {
                 {item.detected_objects.slice(0, 3).map((name, idx) => (
                   <span
                     key={idx}
-                    className="text-xs font-semibold text-green-800 bg-green-50 px-2 py-1 rounded-md capitalize"
+                    className="text-xs font-semibold text-green-900 bg-green-50 px-2 py-1 rounded-md capitalize"
                   >
                     {name.replace(/_/g, " ")}
                   </span>
                 ))}
                 {item.detected_objects.length > 3 && (
-                  <span className="text-xs font-semibold text-gray-400 px-2 py-1">
+                  <span className="text-xs font-semibold text-gray-700 px-2 py-1">
                     +{item.detected_objects.length - 3}
                   </span>
                 )}
               </div>
 
               {item.is_recyclable !== null && (
-                <p className="flex items-center gap-1.5 text-xs text-gray-500 mb-3">
+                <p className="flex items-center gap-1.5 text-xs text-gray-700 font-medium mb-3">
                   <Recycle
                     className={`w-3.5 h-3.5 ${
-                      item.is_recyclable ? "text-green-600" : "text-gray-400"
+                      item.is_recyclable ? "text-green-600" : "text-gray-500"
                     }`}
                   />
                   {item.is_recyclable ? "Bisa Didaur Ulang" : "Sulit Didaur Ulang"}

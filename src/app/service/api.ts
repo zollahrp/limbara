@@ -13,6 +13,12 @@ export interface AuthUser {
   avatar_url: string | null;
 }
 
+export interface RegisterPayload {
+  email: string;
+  name: string;
+  password: string;
+}
+
 export interface CreateScanHistoryPayload {
   image_url: string;
   detected_objects: string[];
@@ -25,6 +31,26 @@ export interface CreateScanHistoryPayload {
 export function loginWithGoogle() {
   const returnTo = encodeURIComponent(window.location.origin);
   window.location.assign(`${BASE_URL}/api/auth/google/login?return_to=${returnTo}`);
+}
+
+export async function loginWithEmail(email: string, password: string): Promise<AuthUser> {
+  try {
+    const response = await api.post<AuthUser>("/auth/login", { email, password });
+    return response.data;
+  } catch (error: unknown) {
+    const message = Axios.isAxiosError(error) ? error.response?.data?.detail : undefined;
+    throw new Error(message || "Tidak dapat masuk. Coba lagi beberapa saat.");
+  }
+}
+
+export async function registerWithEmail(payload: RegisterPayload): Promise<AuthUser> {
+  try {
+    const response = await api.post<AuthUser>("/auth/register", payload);
+    return response.data;
+  } catch (error: unknown) {
+    const message = Axios.isAxiosError(error) ? error.response?.data?.detail : undefined;
+    throw new Error(message || "Tidak dapat membuat akun. Coba lagi beberapa saat.");
+  }
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {

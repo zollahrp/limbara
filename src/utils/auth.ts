@@ -6,6 +6,9 @@ export interface AuthFormValues {
   name?: string;
 }
 
+export type LoginFormValues = Pick<AuthFormValues, "email" | "password">;
+export type RegisterFormValues = Required<AuthFormValues>;
+
 export type AuthFormErrors = Partial<Record<keyof AuthFormValues, string>>;
 
 export function validateAuthForm(mode: AuthMode, values: AuthFormValues): AuthFormErrors {
@@ -21,11 +24,19 @@ export function validateAuthForm(mode: AuthMode, values: AuthFormValues): AuthFo
   }
   if (!values.password) {
     errors.password = "Masukkan password.";
-  } else if (mode === "register" && values.password.length < 10) {
-    errors.password = "Password minimal 10 karakter.";
+  } else if (mode === "register" && values.password.length < 12) {
+    errors.password = "Password minimal 12 karakter.";
   } else if (values.password.length > 128) {
     errors.password = "Password maksimal 128 karakter.";
   }
 
   return errors;
+}
+
+export function validateLoginForm(values: LoginFormValues): AuthFormErrors {
+  return validateAuthForm("login", values);
+}
+
+export function validateRegisterForm(values: RegisterFormValues): AuthFormErrors {
+  return validateAuthForm("register", values);
 }

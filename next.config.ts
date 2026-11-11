@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/**', // Mengizinkan semua folder di dalam Cloudinary
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

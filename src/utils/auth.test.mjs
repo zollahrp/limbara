@@ -1,32 +1,36 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { validateAuthForm } from "./auth.ts";
+import { validateLoginForm, validateRegisterForm } from "./auth.ts";
 
 test("login requires a valid email and password", () => {
-  assert.deepEqual(validateAuthForm("login", { email: "not-an-email", password: "" }), {
+  assert.deepEqual(validateLoginForm({ email: "not-an-email", password: "" }), {
     email: "Masukkan email yang valid.",
     password: "Masukkan password.",
   });
 });
 
-test("registration requires name and a ten-character password", () => {
+test("valid login only requires email and password", () => {
+  assert.deepEqual(validateLoginForm({ email: "user@example.com", password: "rahasia" }), {});
+});
+
+test("registration requires name and a twelve-character password", () => {
   assert.deepEqual(
-    validateAuthForm("register", {
+    validateRegisterForm({
       email: "user@example.com",
       name: " ",
       password: "pendek",
     }),
     {
       name: "Nama minimal 2 karakter.",
-      password: "Password minimal 10 karakter.",
+      password: "Password minimal 12 karakter.",
     },
   );
 });
 
 test("valid registration has no validation errors", () => {
   assert.deepEqual(
-    validateAuthForm("register", {
+    validateRegisterForm({
       email: "user@example.com",
       name: "Budi Limbara",
       password: "rahasia-yang-kuat",
